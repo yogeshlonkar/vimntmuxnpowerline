@@ -1,0 +1,37 @@
+- name: Install tools Play
+  hosts: localhost
+  become: true
+  become_user: root
+  tasks:
+  - name: install vim, tmux, python, socat
+    action: >
+     {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+    with_items:
+     - vim
+     - tmux
+     - python
+     - socat
+     - git
+  - name: python packages 
+    pip:
+      name: pip
+      state: latest
+  - name: python packages 
+    pip:
+      name: "{{ item }}"
+    with_items:
+     - psutil
+     - bzr
+     - pyuv
+     - i3ipc
+     - powerline-status
+
+- name: Fonts Play
+  hosts: localhost
+  tasks:
+    - block:
+       - file: path=~/.local/share/fonts/ state=directory
+       - copy:
+          src: PowerlineSymbols.otf
+          dest: ~/.local/share/fonts/
+      when: (ansible_os_family == "RedHat" or ansible_os_family == "Debian" or ansible_os_family == "Suse" or ansible_os_family == "Solaris")
