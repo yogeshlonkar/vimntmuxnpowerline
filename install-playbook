@@ -1,0 +1,10 @@
+- hosts: example
+  sudo: True
+  user: yogesh
+  tasks:
+  - apt: name=$item state=latest
+    with_items:
+     - vim
+     - tmux
+     - python
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
