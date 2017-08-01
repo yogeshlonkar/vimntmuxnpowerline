@@ -5,7 +5,7 @@
   tasks:
   - name: install vim, tmux, git, socat
     action: >
-     {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+     {{ ansible_pkg_mgr }} name={{ item }} state=present
     with_items:
      - vim
      - tmux
