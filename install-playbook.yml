@@ -3,20 +3,19 @@
   become: true
   become_user: root
   tasks:
-  - name: install vim, tmux, python, socat
+  - name: install vim, tmux, git, socat
     action: >
      {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
     with_items:
-     - vim
+     - vim-gtk
      - tmux
-     - python
      - socat
      - git
-  - name: python packages 
+  - name: update pip to latest
     pip:
       name: pip
       state: latest
-  - name: python packages 
+  - name: install dep python packages 
     pip:
       name: "{{ item }}"
     with_items:
@@ -26,7 +25,7 @@
      - i3ipc
      - powerline-status
 
-- name: Fonts Play
+- name: Fonts Configuration Play
   hosts: localhost
   tasks:
     - block:
@@ -34,4 +33,29 @@
        - copy:
           src: PowerlineSymbols.otf
           dest: ~/.local/share/fonts/
+       - shell: fc-cache -vf ~/.local/share/fonts/
+       - file: path=~/.config/fontconfig/conf.d/ state=directory
+       - copy:
+          src: 10-powerline-symbols.conf
+          dest: ~/.config/fontconfig/conf.d/
       when: (ansible_os_family == "RedHat" or ansible_os_family == "Debian" or ansible_os_family == "Suse" or ansible_os_family == "Solaris")
+
+- name: Copy configurations to "~" directory
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - git:
+        repo: https://github.com/VundleVim/Vundle.vim.git
+        dest: ~/.vim/bundle/Vundle.vim
+      become: true
+      become_user: root
+    - copy:
+       src: .vimrc
+       dest: ~/
+    - copy:
+       src: .tmux.conf
+       dest: ~/
+    - shell: vim +PluginInstall +qall
+    - shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
+      register: powerline_comm
+    - lineinfile: dest=~/.bashrc line='export POWERLINE_PACKAGE_DIR={{ powerline_comm.stdout }}' insertafter='EOF' state=present

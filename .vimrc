@@ -94,3 +94,5 @@ function! WinMove(key)
         exec "wincmd ".a:key
     endif
 endfunction
+
+set shell=/bin/bash
