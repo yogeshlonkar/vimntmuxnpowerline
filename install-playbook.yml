@@ -34,18 +34,18 @@
           src: PowerlineSymbols.otf
           dest: ~/.local/share/fonts/
        - shell: fc-cache -vf ~/.local/share/fonts/
-      when: (ansible_os_family == "RedHat" or ansible_os_family == "Debian" or ansible_os_family == "Suse" or ansible_os_family == "Solaris" or ansible_os_family == "Alpine" or ansible_os_family == "FreeBSD" or ansible_os_family == "Gentoo")
-    - block:
-       - file: path=~/.config/fontconfig/conf.d/ state=directory
-       - copy:
-          src: 10-powerline-symbols.conf
-          dest: ~/.config/fontconfig/conf.d/
+      when: (ansible_os_family != "Darwin")
     - block: 
       - git:
           repo: https://github.com/powerline/fonts.git
           dest: /tmp
       - script: /tmp/fonts/install.sh
       when: (ansible_os_family == "Darwin")
+    - block:
+       - file: path=~/.config/fontconfig/conf.d/ state=directory
+       - copy:
+          src: 10-powerline-symbols.conf
+          dest: ~/.config/fontconfig/conf.d/
 
 - name: Copy configurations to "~" directory
   hosts: localhost
