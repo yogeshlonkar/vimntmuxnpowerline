@@ -1,4 +1,4 @@
-Vim, Tmux, Powerline, Aireline Setup 
+Vim, Tmux, Powerline, Aireline Automated Setup 
 =====================================
 This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline), [vim-airline](https://github.com/vim-airline/vim-airline) and copy DOT files from this repo to user home using [Ansible](https://www.ansible.com/). Currently it only supported on *NIX environment
 
