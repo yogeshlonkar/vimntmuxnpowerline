@@ -1,7 +1,5 @@
 - name: Install tools Play
   hosts: localhost
-  become: true
-  become_user: root
   tasks:
   - name: install vim, tmux, git, socat
     action: >
@@ -11,10 +9,24 @@
      - tmux
      - socat
      - git
+    become: true
+    become_user: root
+    when: (ansible_os_family != "Darwin")
+  - name: install vim, tmux, git, socat
+    action: >
+     {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_items:
+     - vim
+     - tmux
+     - socat
+     - git
+    when: (ansible_os_family == "Darwin")
   - name: update pip to latest
     pip:
       name: pip
       state: latest
+    become: true
+    become_user: root
   - name: install dep python packages 
     pip:
       name: "{{ item }}"
@@ -24,6 +36,8 @@
      - pyuv
      - i3ipc
      - powerline-status
+    become: true
+    become_user: root
 
 - name: Fonts Configuration Play
   hosts: localhost
@@ -40,12 +54,16 @@
           repo: https://github.com/powerline/fonts.git
           dest: /tmp
       - script: /tmp/fonts/install.sh
+      become: true
+      become_user: root
       when: (ansible_os_family == "Darwin")
     - block:
        - file: path=~/.config/fontconfig/conf.d/ state=directory
        - copy:
           src: 10-powerline-symbols.conf
           dest: ~/.config/fontconfig/conf.d/
+      become: true
+      become_user: root
 
 - name: Copy configurations to "~" directory
   hosts: localhost
@@ -54,8 +72,6 @@
     - git:
         repo: https://github.com/VundleVim/Vundle.vim.git
         dest: ~/.vim/bundle/Vundle.vim
-      become: true
-      become_user: root
     - copy:
        src: .vimrc
        dest: ~/
