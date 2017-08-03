@@ -1,5 +1,5 @@
 - name: Install tools Play
-  hosts: localhost
+  hosts: all
   tasks:
   - name: install vim, tmux, git, socat
     action: >
@@ -40,7 +40,7 @@
     become_user: root
 
 - name: Fonts Configuration Play
-  hosts: localhost
+  hosts: all
   tasks:
     - block:
        - file: path=~/.local/share/fonts/ state=directory
@@ -50,13 +50,13 @@
        - shell: fc-cache -vf ~/.local/share/fonts/
       when: (ansible_os_family != "Darwin")
     - block: 
+      - file: path=~/tmp/fonts state=absent
       - git:
           repo: https://github.com/powerline/fonts.git
-          dest: /tmp
+          dest: /tmp/fonts
       - script: /tmp/fonts/install.sh
       become: true
       become_user: root
-      when: (ansible_os_family == "Darwin")
     - block:
        - file: path=~/.config/fontconfig/conf.d/ state=directory
        - copy:
@@ -66,7 +66,7 @@
       become_user: root
 
 - name: Copy configurations to "~" directory
-  hosts: localhost
+  hosts: all
   gather_facts: False
   tasks:
     - git:

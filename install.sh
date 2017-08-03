@@ -1,1 +1,1 @@
-sudo ansible-playbook install-playbook.yml
+sudo ansible-playbook install-playbook.yml -i hosts
