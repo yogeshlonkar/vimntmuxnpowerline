@@ -33,7 +33,7 @@ Copy in tmux will work based on terminal emulator used
 
 ## Tested on
 - [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
-- [ ] **OSX
-- [ ] CentOS
-- [ ] Suse**
+- [ ] **OSX**
+- [ ] **CentOS**
+- [ ] **Suse**
 
