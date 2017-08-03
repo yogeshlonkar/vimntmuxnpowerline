@@ -31,6 +31,8 @@ Copy in tmux will work based on terminal emulator used
 ### Powerline
 `POWERLINE_PACKAGE_DIR` env variable is added to `.bashrc`
 
+
+
 ## Tested on
 - [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
 - [ ] **OSX**
