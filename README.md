@@ -22,11 +22,18 @@ It installs below
 It copies font file if system is LINUX else it clones [Powerline Fonts](https://github.com/powerline/fonts) in `/tmp/` direcory and executes `/tmp/fonts/install.sh`
 ### Vim
 For vim plugins are installed using [**Vundle**](https://github.com/VundleVim/Vundle.vim), example Aireline.
-*There might be an Copy/Paste from System keyboard issue.*
 Please see `.vimrc` for details
 
 ### Tmux
 Please see `.tmux.conf` for tmux configuration details
+Copy in tmux will work based on terminal emulator used
 
 ### Powerline
 `POWERLINE_PACKAGE_DIR` env variable is added to `.bashrc`
+
+## Tested on
+- [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
+- [ ] **OSX
+- [ ] CentOS
+- [ ] Suse**
+
