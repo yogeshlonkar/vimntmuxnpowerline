@@ -32,10 +32,14 @@
      - pyuv
      - i3ipc
      - powerline-status
-  - name: Installing Vundle for vim 
-    git:
-      repo: https://github.com/VundleVim/Vundle.vim.git
-      dest: ~/.vim/bundle/Vundle.vim
+  
+- hosts: all
+  gather_facts: False
+  tasks:
+    - name: Installing Vundle for vim
+      git:
+        repo: https://github.com/VundleVim/Vundle.vim.git
+        dest: ~/.vim/bundle/Vundle.vim
 
 - name: Fonts Configuration Play
   hosts: all

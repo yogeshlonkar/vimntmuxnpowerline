@@ -9,7 +9,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
-Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'wincent/command-t'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'chriskempson/base16-vim'
 Plugin 'vim-airline/vim-airline'
@@ -64,6 +64,7 @@ set number
 set autoindent " for new line
 set smartindent
 set laststatus=2 " show the satus line all the time
+set listchars=tab:▸\ ,trail:☠,precedes:←,extends:→,eol:$
 
 " close NERDTree after a file is opened
 let g:NERDTreeQuitOnOpen=0
