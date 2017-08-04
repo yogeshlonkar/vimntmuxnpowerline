@@ -1,32 +1,28 @@
 - name: Install tools Play
   hosts: all
+  become: true
+  become_user: root
   tasks:
-  - name: install vim, tmux, git, socat
+  - name: Install tmux, git, socat
     action: >
      {{ ansible_pkg_mgr }} name={{ item }} state=present
     with_items:
-     - vim
      - tmux
      - socat
      - git
-    become: true
-    become_user: root
-    when: (ansible_os_family != "Darwin")
-  - name: install vim, tmux, git, socat
+  - set_fact:
+         vim_flavour: "vim" 
+  - name: Overrite vim version for Debian
+    set_fact:
+      vim_flavour: "vim-gnome" 
+    when: (ansible_os_family == "Debian")
+  - name: Install Vim
     action: >
-     {{ ansible_pkg_mgr }} name={{ item }} state=present
-    with_items:
-     - vim
-     - tmux
-     - socat
-     - git
-    when: (ansible_os_family == "Darwin")
+     {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
   - name: update pip to latest
     pip:
       name: pip
       state: latest
-    become: true
-    become_user: root
   - name: install dep python packages 
     pip:
       name: "{{ item }}"
@@ -36,8 +32,10 @@
      - pyuv
      - i3ipc
      - powerline-status
-    become: true
-    become_user: root
+  - name: Installing Vundle for vim 
+    git:
+      repo: https://github.com/VundleVim/Vundle.vim.git
+      dest: ~/.vim/bundle/Vundle.vim
 
 - name: Fonts Configuration Play
   hosts: all
@@ -48,30 +46,22 @@
           src: PowerlineSymbols.otf
           dest: ~/.local/share/fonts/
        - shell: fc-cache -vf ~/.local/share/fonts/
-      when: (ansible_os_family != "Darwin")
     - block: 
       - file: path=~/tmp/fonts state=absent
       - git:
           repo: https://github.com/powerline/fonts.git
           dest: /tmp/fonts
       - script: /tmp/fonts/install.sh
-      become: true
-      become_user: root
     - block:
        - file: path=~/.config/fontconfig/conf.d/ state=directory
        - copy:
           src: 10-powerline-symbols.conf
           dest: ~/.config/fontconfig/conf.d/
-      become: true
-      become_user: root
 
 - name: Copy configurations to "~" directory
   hosts: all
   gather_facts: False
   tasks:
-    - git:
-        repo: https://github.com/VundleVim/Vundle.vim.git
-        dest: ~/.vim/bundle/Vundle.vim
     - copy:
        src: .vimrc
        dest: ~/
