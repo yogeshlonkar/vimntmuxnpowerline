@@ -11,10 +11,10 @@
      - socat
      - git
   - set_fact:
-         vim_flavour: "vim" 
+         vim_flavour: "vim"
   - name: Overrite vim version for Debian
     set_fact:
-      vim_flavour: "vim-gnome" 
+      vim_flavour: "vim-gnome"
     when: (ansible_os_family == "Debian")
   - name: Install Vim
     action: >
@@ -23,7 +23,7 @@
     pip:
       name: pip
       state: latest
-  - name: install dep python packages 
+  - name: install dep python packages
     pip:
       name: "{{ item }}"
     with_items:
@@ -32,7 +32,7 @@
      - pyuv
      - i3ipc
      - powerline-status
-  
+
 - hosts: all
   gather_facts: False
   tasks:
@@ -50,7 +50,7 @@
           src: PowerlineSymbols.otf
           dest: ~/.local/share/fonts/
        - shell: fc-cache -vf ~/.local/share/fonts/
-    - block: 
+    - block:
       - file: path=~/tmp/fonts state=absent
       - git:
           repo: https://github.com/powerline/fonts.git

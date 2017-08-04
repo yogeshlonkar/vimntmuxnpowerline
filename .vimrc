@@ -64,7 +64,8 @@ set number
 set autoindent " for new line
 set smartindent
 set laststatus=2 " show the satus line all the time
-set listchars=tab:▸\ ,trail:☠,precedes:←,extends:→,eol:$
+" space is space
+set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$
 
 " close NERDTree after a file is opened
 let g:NERDTreeQuitOnOpen=0
