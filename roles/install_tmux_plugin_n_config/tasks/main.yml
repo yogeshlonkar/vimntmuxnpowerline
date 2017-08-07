@@ -14,5 +14,4 @@
   file:
     path: ~/.tmux, ~/.tmux.conf
     owner: "{{ lookup('env','USER') }}"
-    group: "{{ lookup('env','USER') }}"
     recurse: yes
