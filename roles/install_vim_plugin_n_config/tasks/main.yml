@@ -9,5 +9,4 @@
   file:
     path: ~/.vim, ~/.vimrc, ~/.viminfo
     owner: "{{ lookup('env','USER') }}"
-    group: "{{ lookup('env','USER') }}"
     recurse: yes
