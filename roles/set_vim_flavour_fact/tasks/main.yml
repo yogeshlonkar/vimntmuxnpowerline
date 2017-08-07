@@ -6,4 +6,7 @@
   set_fact:
       vim_flavour: "vim-gnome"
       when: (ansible_distribution == "Ubuntu")
-
+- name: Overrite vim flavour for Debian
+  set_fact:
+      vim_flavour: "macvim --with-override-system-vim"
+      when: (ansible_distribution == "MacOSX")
