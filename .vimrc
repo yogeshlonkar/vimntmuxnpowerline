@@ -6,16 +6,19 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " Plugins start
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'wincent/command-t'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'benmills/vimux'
 Plugin 'chriskempson/base16-vim'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'kien/ctrlp.vim' " fuzzy find files
+Plugin 'pangloss/vim-javascript'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive' " the ultimate git helper
+Plugin 'tpope/vim-commentary' " comment/uncomment lines with gcc or gc in visual mode
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'pangloss/vim-javascript'
-Plugin 'jelera/vim-javascript-syntax'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'wincent/command-t'
 
 
 " Plugins end
