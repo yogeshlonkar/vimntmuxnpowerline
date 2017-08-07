@@ -1,0 +1,25 @@
+---
+- block:
+    - name: Clone Powerline fonts 
+      git:
+          repo: https://github.com/powerline/fonts.git
+          dest: /tmp/fonts
+    - name: Installing fonts 
+      script: /tmp/fonts/install.sh
+- block:
+    - name: Perform font conf dir state check 
+      file: path=~/.config/fontconfig/conf.d/ state=directory
+    - name: Copy powerline symbols conf
+      copy:
+          src: 10-powerline-symbols.conf
+          dest: ~/.config/fontconfig/conf.d/
+- block:
+    - name: Perform fonts dir state check 
+      file: path=~/.local/share/fonts/ state=directory
+    - name: Copy powerline symbol fonts
+      copy:
+          src: PowerlineSymbols.otf
+          dest: ~/.local/share/fonts/
+    - name: Refresh font cache
+      shell: fc-cache -vf ~/.local/share/fonts/
+

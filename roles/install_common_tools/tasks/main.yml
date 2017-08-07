@@ -1,0 +1,10 @@
+---
+- name: Install tmux, git, socat
+  action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+  with_items:
+      - tmux
+      - socat
+      - git
+  become_user: root
+  when: ( ansible_distribution == 'Ubuntu' )

@@ -1,0 +1,18 @@
+---
+- name: Copy .tmux.conf
+  copy:
+      src: .tmux.conf
+      dest: ~/
+- name: Install tmux plugins
+  shell: ~/.tmux/plugins/tpm/bin/install_plugins 
+- name: Detect powerline path
+  shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
+  register: powerline_comm
+- name: Add powerline path to .bashrc
+  lineinfile: dest=~/.bashrc line='export POWERLINE_PACKAGE_DIR={{ powerline_comm.stdout }}' insertafter='EOF' state=present
+- name: Change Owner of conf and other folders
+  file:
+    path: ~/.tmux, ~/.tmux.conf
+    owner: "{{ lookup('env','USER') }}"
+    group: "{{ lookup('env','USER') }}"
+    recurse: yes

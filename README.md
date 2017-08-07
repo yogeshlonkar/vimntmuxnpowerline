@@ -6,9 +6,9 @@ This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/e
 1. Install [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
 1. execute below (password for root user will be required)
 ```Shell
-  chmod +x install.sh
-  ./install.sh
+  sudo ansible-plabook install-playbook.yml -i host
 ```
+
 ### Things done by ansible
 It installs below 
 1. Git
@@ -20,6 +20,7 @@ It installs below
     1. i3ipc
     1. powerline-status
 It copies font file if system is LINUX else it clones [Powerline Fonts](https://github.com/powerline/fonts) in `/tmp/` direcory and executes `/tmp/fonts/install.sh`
+
 ### Vim
 For vim plugins are installed using [**Vundle**](https://github.com/VundleVim/Vundle.vim), example Aireline.
 Please see `.vimrc` for details
@@ -32,10 +33,10 @@ Copy in tmux will work based on terminal emulator used
 `POWERLINE_PACKAGE_DIR` env variable is added to `.bashrc`
 
 
-
 ## Tested on
 - [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
 - [ ] **OSX**
 - [ ] **CentOS**
 - [ ] **Suse**
+
 

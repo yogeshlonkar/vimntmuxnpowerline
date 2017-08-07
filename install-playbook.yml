@@ -1,97 +1,27 @@
 - name: Install tools & dependency
   hosts: all
-  become: true
-  become_user: root
-  tasks:
-  - name: Install tmux, git, socat
-    action: >
-     {{ ansible_pkg_mgr }} name={{ item }} state=present
-    with_items:
-     - tmux
-     - socat
-     - git
-  - name: Set vim flavour
-    set_fact:
-         vim_flavour: "vim"
-  - name: Overrite vim flavour for Debian
-    set_fact:
-      vim_flavour: "vim-gnome"
-    when: (ansible_os_family == "Debian")
-  - name: Install Vim
-    action: >
-     {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
-  - name: update pip to latest
-    pip:
-      name: pip
-      state: latest
-  - name: Install dep python packages
-    pip:
-      name: "{{ item }}"
-    with_items:
-     - psutil
-     - bzr
-     - pyuv
-     - i3ipc
-     - powerline-status
+  become: False
+  roles:
+    - install_common_tools
+    - set_vim_flavour_fact
+    - install_vim_flavour
+    - install_pip_packages
 
 - name: Install support for vim and tmux
   hosts: all
   gather_facts: False
-  tasks:
-    - name: Installing Vundle for vim
-      git:
-        repo: https://github.com/VundleVim/Vundle.vim.git
-        dest: ~/.vim/bundle/Vundle.vim
-    - name: Installing TPM for tmux
-      git:
-        repo: https://github.com/tmux-plugins/tpm 
-        dest: ~/.tmux/plugins/tpm
+  roles:
+    - install_vundle
+    - install_tpm
 
 - name: Fonts Configuration
   hosts: all
   gather_facts: False
-  tasks:
-    - block:
-      - name: Installing powerline fonts 
-        git:
-          repo: https://github.com/powerline/fonts.git
-          dest: /tmp/fonts
-      - script: /tmp/fonts/install.sh
-    - block:
-       - name: Perform font conf dir state check 
-         file: path=~/.config/fontconfig/conf.d/ state=directory
-       - name: Copy powerline symbols conf
-         copy:
-          src: 10-powerline-symbols.conf
-          dest: ~/.config/fontconfig/conf.d/
-    - block:
-       - name: Perform fonts dir state check 
-         file: path=~/.local/share/fonts/ state=directory
-       - name: Copy powerline symbol fonts
-         copy:
-          src: PowerlineSymbols.otf
-          dest: ~/.local/share/fonts/
-       - name: Refresh font cache
-         shell: fc-cache -vf ~/.local/share/fonts/
+  roles:
+    - install_powerline_fonts
 
-- name: Copy configurations to home directory
+- name: Copy configurations & Install Plugins
   hosts: all
-  gather_facts: False
-  tasks:
-    - name: Copy .vimrc
-      copy:
-       src: .vimrc
-       dest: ~/
-    - name: Copy .tmux.conf
-      copy:
-       src: .tmux.conf
-       dest: ~/
-    - name: Install Vim plugins
-      shell: vim +PluginInstall +qall
-    - name: Install tmux plugins
-      shell: ~/.tmux/plugins/tpm/bin/install_plugins 
-    - name: Detect powerline path
-      shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
-      register: powerline_comm
-    - name: Add powerline path to .bashrc
-      lineinfile: dest=~/.bashrc line='export POWERLINE_PACKAGE_DIR={{ powerline_comm.stdout }}' insertafter='EOF' state=present
+  roles:
+    - install_vim_plugin_n_config
+    - install_tmux_plugin_n_config

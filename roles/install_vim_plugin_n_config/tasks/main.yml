@@ -1,0 +1,13 @@
+---    
+- name: Copy .vimrc
+  copy:
+      src: .vimrc
+      dest: ~/
+- name: Install Vim plugins
+  shell: vim +PluginInstall +qall
+- name: Change Owner of conf and other folders
+  file:
+    path: ~/.vim, ~/.vimrc, ~/.viminfo
+    owner: "{{ lookup('env','USER') }}"
+    group: "{{ lookup('env','USER') }}"
+    recurse: yes
