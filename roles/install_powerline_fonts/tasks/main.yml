@@ -22,4 +22,5 @@
           dest: ~/.local/share/fonts/
     - name: Refresh font cache
       shell: fc-cache -vf ~/.local/share/fonts/
-
+  when: ( ansible_distribution != "MacOSX" )
+  
