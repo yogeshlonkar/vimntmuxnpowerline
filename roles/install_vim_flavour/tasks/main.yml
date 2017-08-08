@@ -7,6 +7,6 @@
 - name: Install Vim
   homebrew:
       name: "{{ vim_flavour }}"
-      state: linked
+      state: present
       install_options: with-override-system-vim
   when: ( ansible_distribution == 'MacOSX' )
