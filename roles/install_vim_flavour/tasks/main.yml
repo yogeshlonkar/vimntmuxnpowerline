@@ -5,7 +5,7 @@
       {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
   when: ( ansible_distribution == 'Ubuntu' )
 - name: Install Vim
-  shell: brew install {{ vim_flavour }} --with-override-system-vim
+  shell: brew install {{ vim_flavour }}
   args:
     warn: no
   when: ( ansible_distribution == 'MacOSX' )
