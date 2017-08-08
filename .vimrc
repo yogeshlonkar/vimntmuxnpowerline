@@ -70,6 +70,18 @@ set laststatus=2 " show the satus line all the time
 " space is space
 set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$
 
+
+""""""""""""""""""""
+" plungins config  "
+"""""""""""""""""""'
+" ignore node_modules from buffer for CommandT
+let g:CommandTWildIgnore = &wildignore
+let g:CommandTWildIgnore .= ',*/.git'
+let g:CommandTWildIgnore .= ',*/.hg'
+let g:CommandTWildIgnore .= ',*/bower_components'
+let g:CommandTWildIgnore .= ',*/node_modules'
+let g:CommandTWildIgnore .= ',*/tmp'
+
 " close NERDTree after a file is opened
 let g:NERDTreeQuitOnOpen=0
 " show hidden files in NERDTree
