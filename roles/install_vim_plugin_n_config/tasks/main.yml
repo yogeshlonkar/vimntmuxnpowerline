@@ -7,6 +7,7 @@
   shell: vim +PluginInstall +qall
 - name: Change Owner of conf and other folders
   file:
-    path: ~/.vim, ~/.vimrc, ~/.viminfo
+    path: "{{ item }}"
     owner: "{{ lookup('env','USER') }}"
     recurse: yes
+  with_items: ["~/.vim", "~/.vimrc", "~/.viminfo"]
