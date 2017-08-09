@@ -6,8 +6,10 @@ This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/e
 1. Install [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
 1. execute below (password for root user will be required)
 ```Shell
-  sudo ansible-plabook install-playbook.yml -i host
+   ansible-plabook install-playbook.yml -i host
 ```
+**Important: On Ubuntu you will should be sudo'er for dependencies to install**
+***Installation might take more than 30 minutes depending on your internet connection***
 
 ### Things done by ansible
 It installs below 

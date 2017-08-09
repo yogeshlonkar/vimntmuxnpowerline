@@ -1,6 +1,6 @@
+---
 - name: Install tools & dependency
   hosts: all
-  become: False
   roles:
     - install_common_tools
     - set_vim_flavour_fact
@@ -24,4 +24,5 @@
   hosts: all
   roles:
     - install_vim_plugin_n_config
+    - install_vim_command_t
     - install_tmux_plugin_n_config

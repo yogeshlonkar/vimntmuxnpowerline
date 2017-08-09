@@ -1,11 +1,11 @@
 ---
 - name: Install Vim
-  become_user: root
+  become: True
   action: >
       {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
   when: ( ansible_distribution == 'Ubuntu' )
 - name: Install Vim
-  shell: brew install {{ vim_flavour }}
+  shell: brew install macvim 
   args:
     warn: no
   when: ( ansible_distribution == 'MacOSX' )

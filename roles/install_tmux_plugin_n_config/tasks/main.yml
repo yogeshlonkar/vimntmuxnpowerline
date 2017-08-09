@@ -5,16 +5,21 @@
       dest: ~/
 - name: Install tmux plugins
   shell: ~/.tmux/plugins/tpm/bin/install_plugins 
+
 - name: Detect powerline path
   shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
   register: powerline_comm
 - name: Check if .bashrc
   file: path=~/.bashrc state=touch
-- name: Add powerline path to .bashrc
+- name: Add powerline path to bashrc
   lineinfile: dest=~/.bashrc line='export POWERLINE_PACKAGE_DIR={{ powerline_comm.stdout }}' insertafter='EOF' state=present
-- name: Change Owner of conf and other folders
-  file:
-    path: "{{ item }}" 
-    owner: "{{ lookup('env','USER') }}"
-    recurse: yes
-  with_times: ["~/.tmux", "~/.tmux.conf"]
+      #
+      #- name: Change owner of .tmux.conf
+      #  file:
+      #    path: "~/.tmux.conf"
+      #    owner: "{{ ansible_user }}"
+      #- name: Change owner of .tmux/
+      #  file:
+      #    path: "~/.tmux"
+      #    owner: "{{ lookup('env','USER') }}"
+      #    recurse: yes

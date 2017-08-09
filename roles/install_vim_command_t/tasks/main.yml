@@ -1,0 +1,18 @@
+---
+- name: Install Ruby-dev
+  become: True
+  action: >
+      {{ ansible_pkg_mgr }} name="ruby-dev" state=present
+  #shell: chdir=~/.vim/bundle/command-t/ruby/command-t/ext/command-t && make clean && ruby extconf.rrb && make
+- name: make clean
+  command: 'make clean'
+  args:
+    chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+  ignore_errors: yes
+- name: ruby extconf.rrb
+  shell: 'ruby extconf.rb'
+  args:
+      chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+- name: make
+  make:
+    chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t

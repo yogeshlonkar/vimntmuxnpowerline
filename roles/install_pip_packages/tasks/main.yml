@@ -1,15 +1,17 @@
 ---
 - name: update pip to latestw
+  become: True
   pip:
     name: pip
     state: latest
 - name: Install dep python packages
+  become: True
   pip:
     name: "{{ item }}"
     state: latest
   with_items:
    - psutil
-   #- bzr #some how this package does not install need to check
+   #- bzr :some how this package does not install need to check
    - pyuv
    - i3ipc
    - powerline-status
