@@ -3,39 +3,39 @@ Vim, Tmux, Powerline, Aireline Automated Setup
 This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline), [vim-airline](https://github.com/vim-airline/vim-airline) and copy DOT files from this repo to user home using [Ansible](https://www.ansible.com/). Currently it only supported on *NIX environment
 
 ### Requirements
-- [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
- >= 2.3
+- [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html) >= 2.3
 
 ### Steps
 1. execute below (password for root user will be required)
 ```Shell
    ansible-plabook install-playbook.yml -i host --ask-become-pass
 ```
+` --ask-become-pass` is optional for mac
+
+
 ***Installation might take more than 30 minutes depending on your internet connection***
 
 ### Things done by ansible
-It installs below 
-1. Git
-1. socat
-1. pip packages
+- It installs below through package manager
+  1. Tmux
+  1. Git
+  1. socat
+- Update [pip](https://pypi.python.org/pypi/pip)
+- Install vim flavour through package manager
+- Install below pip packages
     1. psutil
-    1. bzr
     1. pyuv
     1. i3ipc
-    1. powerline-status
-It copies font file if system is LINUX else it clones [Powerline Fonts](https://github.com/powerline/fonts) in `/tmp/` direcory and executes `/tmp/fonts/install.sh`
-
-### Vim
-For vim plugins are installed using [**Vundle**](https://github.com/VundleVim/Vundle.vim), example Aireline.
-Please see `.vimrc` for details
-
-### Tmux
-Please see `.tmux.conf` for tmux configuration details
-Copy in tmux will work based on terminal emulator used
-
-### Powerline
-`POWERLINE_PACKAGE_DIR` env variable is added to `.bashrc`
-
+    1. [powerline-status](https://powerline.readthedocs.io/en/latest/)
+- Install [Vundle](https://github.com/VundleVim/Vundle.vim) & [TPM](https://github.com/tmux-plugins/tpm)
+  - [Command-t](https://github.com/wincent/command-t) Plugin required Ruby so it is installed through package manager
+- Install [Powerline Fonts](https://github.com/powerline/fonts) using `/tmp/` direcory
+- Copy `.vimrc` to home directory & Install plugins defined in it
+- Copy `.tmux.conf` to home directory & Install plugins defined in it
+  - Add `POWERLINE_PACKAGE_DIR` env variable to
+    1. `/etc/environment` or `/etc/launchd.conf`
+    1. `.bashrc`
+    1. `~/.bash_profile`
 
 ## Tested on
 - [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
