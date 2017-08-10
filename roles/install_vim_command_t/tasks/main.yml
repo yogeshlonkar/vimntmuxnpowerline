@@ -3,7 +3,14 @@
   become: True
   action: >
       {{ ansible_pkg_mgr }} name="ruby-dev" state=present
-  #shell: chdir=~/.vim/bundle/command-t/ruby/command-t/ext/command-t && make clean && ruby extconf.rrb && make
+  when: (ansible_distribution != "MacOSX")
+
+- name: Install Vim on macOS
+  shell: brew install ruby-build
+  args:
+    warn: no
+  when: ( ansible_distribution == 'MacOSX' )
+
 - name: make clean
   command: 'make clean'
   args:

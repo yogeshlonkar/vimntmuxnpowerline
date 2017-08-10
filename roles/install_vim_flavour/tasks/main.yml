@@ -12,6 +12,7 @@
   become: True
   action: >
       {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
+  when: ( ansible_distribution != 'MacOSX' )
 
 - name: Install Vim on macOS
   shell: brew install macvim 
