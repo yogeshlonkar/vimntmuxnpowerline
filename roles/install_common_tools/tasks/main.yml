@@ -8,6 +8,7 @@
       - git
   become: True
   when: ( ansible_distribution != 'MacOSX' )
+
 - name: MacOSX - Install tmux, git, socat
   action: >
       {{ ansible_pkg_mgr }} name={{ item }} state=present

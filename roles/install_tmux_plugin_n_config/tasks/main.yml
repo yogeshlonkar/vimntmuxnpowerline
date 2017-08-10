@@ -10,6 +10,12 @@
   become: True
   shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
   register: powerline_comm
+  when: ( ansible_distribution != 'MacOSX' )
+
+- name: Detect powerline path for MacOSX
+  shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
+  register: powerline_comm
+  when: ( ansible_distribution == 'MacOSX' )
 
 - name: Set Powerline package fact
   set_fact:
@@ -17,11 +23,11 @@
 
 - name: Add POWERLINE_PACKAGE_DIR env var to /etc/environment
   lineinfile: path=/etc/environment line='POWERLINE_PACKAGE_DIR={{ P_P_D }}' state=present
-  when: ( ansible_distribution != 'Darwin' )
+  when: ( ansible_distribution != 'MacOSX' )
 
 - name: Add POWERLINE_PACKAGE_DIR env var to /etc/launchd.conf
   lineinfile: path=/etc/launchd.conf line='POWERLINE_PACKAGE_DIR={{ P_P_D }}' state=present
-  when: ( ansible_distribution == 'Darwin' )
+  when: ( ansible_distribution == 'MacOSX' )
 
 - name: Add POWERLINE_PACKAGE_DIR env var to ~/.bashrc
   lineinfile: path=~/.bashrc line='export POWERLINE_PACKAGE_DIR={{ P_P_D }}' state=present create=yes
