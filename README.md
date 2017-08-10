@@ -2,8 +2,11 @@ Vim, Tmux, Powerline, Aireline Automated Setup
 =====================================
 This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline), [vim-airline](https://github.com/vim-airline/vim-airline) and copy DOT files from this repo to user home using [Ansible](https://www.ansible.com/). Currently it only supported on *NIX environment
 
+### Requirements
+- [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
+ >= 2.3
+
 ### Steps
-1. Install [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
 1. execute below (password for root user will be required)
 ```Shell
    ansible-plabook install-playbook.yml -i host --ask-become-pass

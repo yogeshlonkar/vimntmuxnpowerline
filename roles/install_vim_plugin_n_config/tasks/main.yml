@@ -5,15 +5,3 @@
       dest: ~/
 - name: Install Vim plugins
   shell: vim +PluginInstall +qall
-  #- name: Change owner of .vim/
-  #  file:
-  #    path: "vim"
-  #    owner: "{{ ansible_user }}"
-  #    recurse: yes
-  #- debug:
-  #    msg: "Changin to user {{ ansible_user }} "
-  #- name: Change owner of .vimrc & .viminfo
-  #  file:
-  #    path: "{{ item }}"
-  #    owner: "{{ ansible_user }}"
-  #  with_items: ["~/.vimrc", "~/.viminfo"]

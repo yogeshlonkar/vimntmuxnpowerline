@@ -1,5 +1,5 @@
 ---
-- name: update pip to latestw
+- name: update pip to latest
   become: True
   pip:
     name: pip
