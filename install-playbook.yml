@@ -3,7 +3,6 @@
   hosts: all
   roles:
     - install_common_tools
-    - set_vim_flavour_fact
     - install_vim_flavour
     - install_pip_packages
 

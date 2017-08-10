@@ -1,10 +1,19 @@
 ---
+- name: Set vim flavour
+  set_fact:
+      vim_flavour: "vim"
+
+- name: Overrite vim flavour for Debian
+  set_fact:
+      vim_flavour: "vim-gnome"
+  when: (ansible_distribution == "Ubuntu")
+
 - name: Install Vim
   become: True
   action: >
       {{ ansible_pkg_mgr }} name={{ vim_flavour }} state=present
-  when: ( ansible_distribution == 'Ubuntu' )
-- name: Install Vim
+
+- name: Install Vim on macOS
   shell: brew install macvim 
   args:
     warn: no
