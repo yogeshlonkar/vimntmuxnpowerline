@@ -38,7 +38,9 @@ if $TMUX == ''
 else
 	set clipboard=unnamed
 endif
-
+if &term == "screen"
+	set t_Co=256
+endif
 " code folding settings
 set foldmethod=syntax " fold based on indent
 set foldnestmax=10 " deepest fold is 10 levels

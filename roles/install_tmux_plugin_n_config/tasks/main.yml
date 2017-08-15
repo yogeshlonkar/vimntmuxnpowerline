@@ -12,11 +12,6 @@
   register: powerline_comm
   when: ( ansible_distribution != 'MacOSX' )
 
-- name: Detect powerline path for MacOSX
-  shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
-  register: powerline_comm
-  when: ( ansible_distribution == 'MacOSX' )
-
 - name: Set Powerline package fact
   set_fact:
     P_P_D: "{{ powerline_comm.stdout }}"

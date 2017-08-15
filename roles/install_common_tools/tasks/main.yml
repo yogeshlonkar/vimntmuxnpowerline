@@ -1,19 +1,21 @@
 ---
-- name: Ubuntu - Install tmux, git, socat
+- name: Ubuntu - Install tmux, git, socat, python-pip
   action: >
       {{ ansible_pkg_mgr }} name={{ item }} state=present
   with_items:
       - tmux
       - socat
       - git
+      - python-pip
   become: True
   when: ( ansible_distribution != 'MacOSX' )
 
-- name: MacOSX - Install tmux, git, socat
+- name: MacOSX - Install tmux, git, socat, python-pip
   action: >
       {{ ansible_pkg_mgr }} name={{ item }} state=present
   with_items:
       - tmux
       - socat
       - git
+      - python-pip
   when: ( ansible_distribution == 'MacOSX' )
