@@ -8,7 +8,7 @@ This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/e
 ### Steps
 1. execute below
 ```Shell
-   ansible-plabook install-playbook.yml -i host --ask-become-pass
+   ansible-playbook install-playbook.yml -i hosts --ask-become-pass
 ```
 ` --ask-become-pass` is optional for mac
 
