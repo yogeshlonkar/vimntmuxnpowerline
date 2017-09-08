@@ -19,7 +19,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'wincent/command-t'
-
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'mxw/vim-jsx'
 
 " Plugins end
 call vundle#end()            " required
@@ -33,16 +34,19 @@ set tabstop=4 " the visible width of tabs
 set softtabstop=4 " edit as if the tabs are 4 characters wide
 set shiftwidth=4 " number of spaces to use for indent and unindent
 set shiftround " round indent to a multiple of 'shiftwidth'
+
 if $TMUX == ''
     set clipboard+=unnamed
-else
-	set clipboard=unnamed
 endif
+
 if &term == "screen"
 	set t_Co=256
 endif
+"mouse support
+set mouse=a
+
 " code folding settings
-set foldmethod=syntax " fold based on indent
+set foldmethod=manual " fold based on indent
 set foldnestmax=10 " deepest fold is 10 levels
 set nofoldenable " don't fold by default
 set foldlevel=1
@@ -70,7 +74,7 @@ set autoindent " for new line
 set smartindent
 set laststatus=2 " show the satus line all the time
 " space is space
-set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$
+set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$,space:˙
 
 
 """"""""""""""""""""
@@ -93,7 +97,8 @@ nmap <silent> <leader>k :NERDTreeToggle<cr>
 " expand to the path of the file in the current buffer
 nmap <silent> <leader>y :NERDTreeFind<cr>
 
-
+" jsx plugin
+let g:jsx_ext_required = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
