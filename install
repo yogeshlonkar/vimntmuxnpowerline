@@ -1,0 +1,12 @@
+#!/bin/bash -x
+xcode-select --install
+
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+brew install -f bash bash-completion ansible autoconf awscli cmake coreutils fswatch gcc gettext git gnutls go jq keychain libev libevent libffi libgcrypt libgpg-error libidn2 libmaxminddb libmpc libsmi libssh libtasn1 libtool libunistring libyaml mpfr nettle nghttp2 node openssl openssl@1.1 p11-kit pkg-config python python3 python@2 readline reattach-to-user-namespace ruby-build socat sqlite sshpass terraform tmux wget wireshark
+
+brew install macvim --with-override-system-vim
+
+brew linkapps
+
+ansible-playbook install-playbook.yml -i hosts

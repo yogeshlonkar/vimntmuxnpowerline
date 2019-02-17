@@ -20,13 +20,15 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'wincent/command-t'
 Plugin 'chase/vim-ansible-yaml'
-Plugin 'mxw/vim-jsx'
+Plugin 'mattn/emmet-vim'
+Plugin 'Chiel92/vim-autoformat'
 
 " Plugins end
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='deus'
 
 set noexpandtab " tabs ftw
 set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
@@ -44,6 +46,8 @@ if &term == "screen"
 endif
 "mouse support
 set mouse=a
+"copy usint ctrl+c while in visual mode
+vmap <C-c> "+y
 
 " code folding settings
 set foldmethod=manual " fold based on indent
@@ -88,6 +92,9 @@ let g:CommandTWildIgnore .= ',*/bower_components'
 let g:CommandTWildIgnore .= ',*/node_modules'
 let g:CommandTWildIgnore .= ',*/tmp'
 
+" vim-ansible-yaml
+let g:ansible_options = {'ignore_blank_lines': 0}
+
 " close NERDTree after a file is opened
 let g:NERDTreeQuitOnOpen=0
 " show hidden files in NERDTree
@@ -99,6 +106,12 @@ nmap <silent> <leader>y :NERDTreeFind<cr>
 
 " jsx plugin
 let g:jsx_ext_required = 0
+
+let g:user_emmet_settings = {
+			\  'javascript' : {
+			\      'extends' : 'jsx',
+			\  },
+			\}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -124,3 +137,4 @@ function! WinMove(key)
 endfunction
 
 set shell=/bin/bash
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=ansible foldmethod=indent
