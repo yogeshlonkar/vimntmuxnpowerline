@@ -1,64 +1,70 @@
 ---
-- name: Copy dot files
-  synchronize:
-    src: dots
-    dest: ~/
+- name: Install support for vim and tmux
+  hosts: all
+  tasks:
+    - name: Copy dot files
+      synchronize:
+        src: dots/
+        dest: ~/
+    
+    - name: Update pip
+      pip:
+        name: pip
+        state: latest
+    
+    - name: Install python packages
+      pip:
+        name: [ 'psutil', 'pyuv', 'i3ipc', 'powerline-status' ]
+        state: latest
+    
+    - name: Install Vundle
+      git:
+        repo: https://github.com/VundleVim/Vundle.vim.git
+        dest: ~/.vim/bundle/Vundle.vim
+    
+    - name: Install Vim plugins
+      shell: vim +PluginInstall +qall
+    
+    - name: Install command-t
+      shell: |
+         make clean 
+         ruby extconf.rb
+         make
+      ignore_errors: yes
+      args:
+        chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
 
-- name: Update pip
-  pip:
-    name: pip
-    state: latest
+    - name: Copy powerline symbols conf
+      copy:
+        src: fonts/10-powerline-symbols.conf
+        dest: ~/.config/fontconfig/conf.d/
+    
+    - name: Copy powerline fonts
+      copy:
+        src: fonts/PowerlineSymbols.otf
+        dest: ~/Library/Fonts
 
-- name: Install python packages
-  with_items:
-    - psutil
-    - pyuv
-    - i3ipc
-    - powerline-status
-  pip:
-    name: "{{ item }}"
-    state: latest
+    - name: Install TPM
+      git:
+        repo: https://github.com/tmux-plugins/tpm 
+        dest: ~/.tmux/plugins/tpm
+    
+    - name: Install tmux plugins
+      shell: ~/.tmux/plugins/tpm/bin/install_plugins
+    
+    - name: Detect powerline path
+      shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
+      register: powerline_comm
+    
+    - name: Clone Powerline fonts 
+      git:
+        repo: https://github.com/powerline/fonts.git
+        dest: /tmp/fonts
 
-- name: Install Vundle
-  git:
-    repo: https://github.com/VundleVim/Vundle.vim.git
-    dest: ~/.vim/bundle/Vundle.vim
+    - name: Installing fonts 
+      tags: fonts
+      command: chdir=/tmp/fonts sh install.sh
 
-- name: Install command-t
-  shell: make clean && ruby extconf.rb && make
-  ignore_errors: yes
-  args:
-    chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+    - name: Perform font conf dir state check 
+      file: path=~/.config/fontconfig/conf.d/ state=directory
 
-- name: Install Vim plugins
-  shell: vim +PluginInstall +qall
-
-- name: Install TPM
-  git:
-    repo: https://github.com/tmux-plugins/tpm 
-    dest: ~/.tmux/plugins/tpm
-
-- name: Install tmux plugins
-  shell: ~/.tmux/plugins/tpm/bin/install_plugins
-
-- name: Detect powerline path
-  shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
-  register: powerline_comm
-
-- name: Set Powerline package dir
-  shell: sed -E 's/(export POWERLINE_PACKAGE_DIR=).*/\1{{ powerline_comm.stdout }}/g' ~/.bash_profile
-
-- block:
-  - name: Clone Powerline fonts 
-    git:
-      repo: https://github.com/powerline/fonts.git
-      dest: /tmp/fonts
-  - name: Installing fonts 
-    script: /tmp/fonts/install.sh
-- block:
-  - name: Perform font conf dir state check 
-    file: path=~/.config/fontconfig/conf.d/ state=directory
-  - name: Copy powerline symbols conf
-    copy:
-      src: 10-powerline-symbols.conf
-      dest: ~/.config/fontconfig/conf.d/
