@@ -1,27 +1,70 @@
 ---
-- name: Install tools & dependency
-  hosts: all
-  roles:
-    - install_common_tools
-    - install_vim_flavour
-    - install_pip_packages
-
 - name: Install support for vim and tmux
   hosts: all
-  gather_facts: False
-  roles:
-    - install_vundle
-    - install_tpm
+  tasks:
+    - name: Copy dot files
+      synchronize:
+        src: dots/
+        dest: ~/
+    
+    - name: Update pip
+      pip:
+        name: pip
+        state: latest
+    
+    - name: Install python packages
+      pip:
+        name: [ 'psutil', 'pyuv', 'i3ipc', 'powerline-status' ]
+        state: latest
+    
+    - name: Install Vundle
+      git:
+        repo: https://github.com/VundleVim/Vundle.vim.git
+        dest: ~/.vim/bundle/Vundle.vim
+    
+    - name: Install Vim plugins
+      shell: vim +PluginInstall +qall
+    
+    - name: Install command-t
+      shell: |
+         make clean 
+         ruby extconf.rb
+         make
+      ignore_errors: yes
+      args:
+        chdir: ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
 
-- name: Fonts Configuration
-  hosts: all
-  gather_facts: False
-  roles:
-    - install_powerline_fonts
+    - name: Copy powerline symbols conf
+      copy:
+        src: fonts/10-powerline-symbols.conf
+        dest: ~/.config/fontconfig/conf.d/
+    
+    - name: Copy powerline fonts
+      copy:
+        src: fonts/PowerlineSymbols.otf
+        dest: ~/Library/Fonts
 
-- name: Copy configurations & Install Plugins
-  hosts: all
-  roles:
-    - install_vim_plugin_n_config
-    - install_vim_command_t
-    - install_tmux_plugin_n_config
+    - name: Install TPM
+      git:
+        repo: https://github.com/tmux-plugins/tpm 
+        dest: ~/.tmux/plugins/tpm
+    
+    - name: Install tmux plugins
+      shell: ~/.tmux/plugins/tpm/bin/install_plugins
+    
+    - name: Detect powerline path
+      shell: pip show powerline-status 2>/dev/null | grep Location | awk '{print $2}'
+      register: powerline_comm
+    
+    - name: Clone Powerline fonts 
+      git:
+        repo: https://github.com/powerline/fonts.git
+        dest: /tmp/fonts
+
+    - name: Installing fonts 
+      tags: fonts
+      command: chdir=/tmp/fonts sh install.sh
+
+    - name: Perform font conf dir state check 
+      file: path=~/.config/fontconfig/conf.d/ state=directory
+

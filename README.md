@@ -36,11 +36,3 @@ This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/e
     1. `/etc/environment` or `/etc/launchd.conf`
     1. `.bashrc`
     1. `~/.bash_profile`
-
-## Tested on
-- [x] **Ubuntu** 16.04 LTS, [Guake Termial](https://github.com/Guake/guake)
-- [ ] **OSX**
-- [ ] **CentOS**
-- [ ] **Suse**
-
-
