@@ -32,4 +32,4 @@ if [ type helm >/dev/null 2>&1 ]; then source <(helm completion bash); fi
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
-
+[ -f ~/.aliases ] && source ~/.aliases
