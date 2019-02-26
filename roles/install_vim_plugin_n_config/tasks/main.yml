@@ -1,7 +1,0 @@
----    
-- name: Copy .vimrc
-  copy:
-      src: .vimrc
-      dest: ~/
-- name: Install Vim plugins
-  shell: vim +PluginInstall +qall
