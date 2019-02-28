@@ -10,7 +10,7 @@ export PS1="${LYELLOW}\u@\h:${CYAN}\W${PS_CLEAR}\$ "
 # export PS1=\h:\W \u\$
 
 # Useful functions
-fstrigger()
+function fstrigger()
 {
 	if [[ "$#" -ne 2 ]]; then
 		echo -e "Usage:\nfstrigger paths command\nExecute command on file/directory change event of given paths"
@@ -34,11 +34,11 @@ alias fstrigger=""
 if [ -d '/usr/local/lib/python2.7/site-packages' ]; then export POWERLINE_PACKAGE_DIR=/usr/local/lib/python2.7/site-packages; fi
 
 # bash completions
-[ -f '~/.git-completion.bash' ] && source ~/.git-completion.bash
-[ -f '~/google-cloud-sdk/path.bash.inc' ] && source '~/google-cloud-sdk/path.bash.inc'
-[ -f '~/google-cloud-sdk/completion.bash.inc' ] && source '~/google-cloud-sdk/completion.bash.inc'
-if [ type helm >/dev/null 2>&1 ]; then source <(helm completion bash); fi
+[ -f ~/google-cloud-sdk/path.bash.inc ] && source ~/google-cloud-sdk/path.bash.inc
+[ -f ~/google-cloud-sdk/completion.bash.inc ] && source ~/google-cloud-sdk/completion.bash.inc
+if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
 [ -f "$(brew --prefix)/etc/bash_completion" ] && . $(brew --prefix)/etc/bash_completion
+[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 [ -f '/usr/local/aws/bin/aws_completer' ] && complete -C '/usr/local/aws/bin/aws_completer' aws
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash

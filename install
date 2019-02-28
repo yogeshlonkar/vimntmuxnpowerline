@@ -1,11 +1,13 @@
 #!/bin/bash
-
+start_t=$(date +%s)
 xcode-select --install
 
 if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"; fi
 
-brew install bash bash-completion ansible awscli cfssl cmake coreutils figlet fswatch gcc git jq keychain macvim node openssl@1.1 python@2 python3 reattach-to-user-namespace ruby-build socat sphinx-doc terraform tmux unrar watch wget wireshark
+brew install bash bash-completion ansible awscli cfssl cmake coreutils figlet fswatch gcc git jq keychain macvim node openssl@1.1 python@2 python3 reattach-to-user-namespace ruby-build socat sphinx-doc terraform tmux unrar watch wget 
 brew tap caskroom/fonts
-brew cask install font-dejavusansmono-nerd-font-mono fluro
+brew cask install font-dejavusansmono-nerd-font-mono fluor
 
 ansible-playbook install-playbook.yml -i hosts
+end_t=$(date +%s)
+echo took $((end_t-start_t))s

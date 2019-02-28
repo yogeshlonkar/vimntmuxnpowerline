@@ -8,7 +8,7 @@ if [[ "$(head -1 /tmp/.git-status-bar.cache 2>/dev/null)" == "$(stat -f "%m" .)"
   tail -1 /tmp/.git-status-bar.cache
   exit 0
 fi
-if ! [ -f .git ] && ! [ -d .git ]; then
+if ! git status --no-ahead-behind --short >/dev/null 2>&1; then
   exit 1
 fi
 

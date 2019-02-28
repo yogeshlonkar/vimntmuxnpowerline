@@ -13,6 +13,9 @@ else
   total_charge=$(echo $battery_info | grep -o '"MaxCapacity" = [0-9]\+' | awk '{print $3}')
   is_charging=$(echo $battery_info | grep -o '"IsCharging" = Yes' | awk '{print $3}')
 fi
+if [ -z "$current_charge" ]; then
+	exit 1
+fi
 llast_slot_decimal=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l)
 last_slot_decimal=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l | cut -d '.' -f 2 | head -c 1)
 charged_slots=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l | cut -d '.' -f 1)
