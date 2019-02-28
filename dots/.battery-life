@@ -1,0 +1,44 @@
+#!/bin/bash
+SECS=$(date +%s)
+HEART='♥'
+EMPTY_HEART=''
+HALF_HEART='ﯜ'
+
+if [[ `uname` == 'Linux' ]]; then
+  current_charge=$(cat /proc/acpi/battery/BAT1/state | grep 'remaining capacity' | awk '{print $3}')
+  total_charge=$(cat /proc/acpi/battery/BAT1/info | grep 'last full capacity' | awk '{print $4}')
+else
+  battery_info=`ioreg -rc AppleSmartBattery`
+  current_charge=$(echo $battery_info | grep -o '"CurrentCapacity" = [0-9]\+' | awk '{print $3}')
+  total_charge=$(echo $battery_info | grep -o '"MaxCapacity" = [0-9]\+' | awk '{print $3}')
+  is_charging=$(echo $battery_info | grep -o '"IsCharging" = Yes' | awk '{print $3}')
+fi
+if [ -z "$current_charge" ]; then
+	exit 1
+fi
+llast_slot_decimal=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l)
+last_slot_decimal=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l | cut -d '.' -f 2 | head -c 1)
+charged_slots=$(echo "(($current_charge/$total_charge)*10)+1" | bc -l | cut -d '.' -f 1)
+if [[ $charged_slots -gt 10 ]]; then
+  charged_slots=10
+fi
+echo -n '#[fg=colour160]'
+for i in `seq 1 $charged_slots`; do
+  if (( charged_slots != i )); then
+	echo -n "$HEART";
+  else
+	# if [ "$is_charging" == "Yes" ] && [ $(($SECS%2)) -eq 0 ]; then
+	  # echo -n '#[fg=white]'
+	# fi
+	if (( last_slot_decimal < 5 )); then
+	  echo -n "$HALF_HEART";
+	else
+	  echo -n "$HEART";
+	fi
+  fi
+done
+
+if [[ $charged_slots -lt 10 ]]; then
+  echo -n '#[fg=white]'
+  for i in `seq 1 $(echo "10-$charged_slots" | bc)`; do echo -n "$EMPTY_HEART"; done
+fi
