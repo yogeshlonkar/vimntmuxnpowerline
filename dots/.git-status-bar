@@ -13,6 +13,7 @@ readonly gitstatus=$( LC_ALL=C git status --untracked-files=all --porcelain --br
 # if the status is fatal, exit now
 [[ "$?" -ne 0 ]] && exit 0
 
+num_deleted=0
 num_staged=0
 num_changed=0
 num_conflicts=0
@@ -27,6 +28,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
       fi
       branch_line="${line/\.\.\./^}" ;;
     ?M) ((num_changed++)) ;;
+    ?D) ((num_deleted++)) ;;
     U?) ((num_conflicts++)) ;;
     \?\?) ((num_untracked++)) ;;
     *) ((num_staged++)) ;;
@@ -41,9 +43,9 @@ if [[ -e "${stash_file}" ]]; then
   done < "${stash_file}"
 fi
 
-clean=' '
+clean=''
 if (( num_changed == 0 && num_staged == 0 && num_untracked == 0 && num_stashed == 0 && num_conflicts == 0 )) ; then
-  clean=' '
+  clean=''
 fi
 
 IFS="^" read -ra branch_fields <<< "${branch_line/\#\# }"
@@ -71,11 +73,11 @@ else
     for remote_field in "${remote_fields[@]}"; do
       if [[ "$remote_field" == *ahead* ]]; then
         num_ahead=${remote_field:6}
-        ahead="${num_ahead}ﲗ"
+        ahead="${num_ahead}"
       fi
       if [[ "$remote_field" == *behind* ]]; then
         num_behind=${remote_field:7}
-        behind="${num_behind# }ﲔ"
+        behind="${num_behind# }"
       fi
     done
     remote="${behind}${ahead}"
@@ -83,7 +85,7 @@ else
 fi
 
 if [[ -n "$remote" ]] ; then
-  remote="$remote "
+  remote=" $remote"
 fi
 if [[ -z "$upstream" ]] ; then
   upstream=''
@@ -99,11 +101,13 @@ trim1()
 	echo -n "$arg1"
 }
 num_changed=$(trim1 $num_changed "*")
+num_deleted=$(trim1 $num_deleted "-")
+num_conflicts=$(trim1 $num_conflicts "!")
 num_untracked=$(trim1 $num_untracked "")
 num_stashed=$(trim1 $num_stashed "")
-git_status=$(printf "%s%s%s%s" "$remote" "$num_changed" "$num_untracked" "$num_stashed")
+git_status=$(printf "%s%s%s%s%s%s" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$remote")
 if [[ -n "$git_status" ]] ; then
   git_status="$git_status "
 fi
-branch=$(echo $branch | awk -v len=15 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
+branch=$(echo $branch | sed -E -e 's/(features?)(\/.*)/F\2/g' -e 's/(hotfix)(\/.*)/H\2/g' -e 's/(releases?)(\/.*)/R\2/g' -e 's/(bugfix)(\/.*)/B\2/g' -e 's/(issues?)(\/.*)/I\2/g' | awk -v len=20 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
 printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status" 
