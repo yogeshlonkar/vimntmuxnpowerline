@@ -104,8 +104,9 @@ num_changed=$(trim1 $num_changed "*")
 num_deleted=$(trim1 $num_deleted "-")
 num_conflicts=$(trim1 $num_conflicts "!")
 num_untracked=$(trim1 $num_untracked "")
-num_stashed=$(trim1 $num_stashed "")
-git_status=$(printf "%s%s%s%s%s%s" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$remote")
+num_staged=$(trim1 $num_staged "﯁")
+num_stashed=$(trim1 $num_stashed "﮾")
+git_status=$(printf "%s%s%s%s%s%s%s" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$num_staged" "$remote")
 if [[ -n "$git_status" ]] ; then
   git_status="$git_status "
 fi
