@@ -8,6 +8,23 @@ if ! [ -f .git ] && ! [ -d .git ]; then
   exit 1
 fi
 
+# Manage remote updates every 15 minutes
+dir_id=$(echo -n $dir | base64)
+if ! [ -f /tmp/.git_remote_update.db ]; then
+sqlite3 /tmp/.git_remote_update.db <<EOF
+create table gru (id TEXT PRIMARY KEY, d INTEGER);
+EOF
+fi
+last_remote_update=$(sqlite3 /tmp/.git_remote_update.db "select d from gru where id='${dir_id}'")
+curr_time=$(date +%s)
+stale_timeout=$(expr ${curr_time} + 900)
+if (( last_remote_update < ${curr_time} )); then
+	printf "#[fg=colour235,bg=colour114]  痢 "
+	git remote update >/dev/null 2>&1 &
+	sqlite3 /tmp/.git_remote_update.db "insert or replace into gru (id, d) values ('${dir_id}', ${stale_timeout})" >/dev/null 2>&1 &
+	exit 0;
+fi
+
 readonly gitstatus=$( LC_ALL=C git status --untracked-files=all --porcelain --branch )
 
 # if the status is fatal, exit now
@@ -43,7 +60,7 @@ if [[ -e "${stash_file}" ]]; then
   done < "${stash_file}"
 fi
 
-clean=''
+clean=''
 if (( num_changed == 0 && num_staged == 0 && num_untracked == 0 && num_stashed == 0 && num_conflicts == 0 )) ; then
   clean=''
 fi
@@ -77,15 +94,15 @@ else
       fi
       if [[ "$remote_field" == *behind* ]]; then
         num_behind=${remote_field:7}
-        behind="${num_behind# }"
+        behind="${num_behind}"
       fi
     done
-    remote="${behind}${ahead}"
+	remote="${behind}${ahead}"
   fi
 fi
 
 if [[ -n "$remote" ]] ; then
-  remote=" $remote"
+  remote="$remote|"
 fi
 if [[ -z "$upstream" ]] ; then
   upstream=''
@@ -106,7 +123,7 @@ num_conflicts=$(trim1 $num_conflicts "!")
 num_untracked=$(trim1 $num_untracked "")
 num_staged=$(trim1 $num_staged "﯁")
 num_stashed=$(trim1 $num_stashed "﮾")
-git_status=$(printf "%s%s%s%s%s%s%s" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$num_staged" "$remote")
+git_status=$(printf "%s%s%s%s%s%s%s%s" "$remote" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$num_staged" "$clean")
 if [[ -n "$git_status" ]] ; then
   git_status="$git_status "
 fi
