@@ -9,11 +9,22 @@ export PS1="${LYELLOW}\u@\h:${CYAN}\W${PS_CLEAR}\$ "
 ### Default
 # export PS1=\h:\W \u\$
 
+# Useful functions
+fstrigger()
+{
+	if [[ "$#" -ne 2 ]]; then
+		echo -e "Usage:\nfstrigger paths command\nExecute command on file/directory change event of given paths"
+		return 1
+	fi
+	fswatch -o $1 | while read -d 1; do `$2`; echo -e "\ndone"; done
+}
+
 # Alias
 alias hlt="helm template . | vim - \"+set filetype=yaml\""
 alias chrome-debug="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9229"
 alias docker-cleanup="docker rmi \$(docker images | grep -e \"<none>\" | awk '{print \$3}')"
 alias ll="ls -lShr"
+alias fstrigger=""
 
 # Environment variables
 [ -f "$(/usr/libexec/java_home 2>/dev/null)" ] && export JAVA_HOME=$(/usr/libexec/java_home) && export PATH="$JAVA_HOME/bin:$PATH"
