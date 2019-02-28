@@ -31,7 +31,7 @@ update_remote()
 {
 	echo $(date +%s) >> /tmp/execution.log
 	success=0;
-	git remote update
+	git remote update --prune
 	if (( $? )); then
 		success=1
 	fi
@@ -123,6 +123,7 @@ clean=''
 if (( num_changed == 0 && num_staged == 0 && num_untracked == 0 && num_stashed == 0 && num_conflicts == 0 && num_deleted == 0 && num_ahead == 0 && num_behind == 0 )) ; then
   clean=''
 fi
+[[ "$(git status --untracked-files=all --porcelain --branch)" == *"[gone]" ]] && clean='|'
 
 if [[ -n "$remote" ]] && (( num_changed != 0 || num_staged != 0 || num_untracked == || num_stashed == 0 || num_conflicts == 0 || num_deleted )) ; then
   remote="$remote|"
