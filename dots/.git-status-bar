@@ -6,7 +6,7 @@ fi
 cd "$dir" > /dev/null
 if [[ "$(head -1 /tmp/.git-status-bar.cache 2>/dev/null)" == "$(stat -f "%m" .)" ]]; then
   tail -1 /tmp/.git-status-bar.cache
-  exit 1
+  exit 0
 fi
 if ! [ -f .git ] && ! [ -d .git ]; then
   exit 1

@@ -6,6 +6,6 @@ if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https:
 
 brew install bash bash-completion ansible awscli cfssl cmake coreutils figlet fswatch gcc git jq keychain macvim node openssl@1.1 python@2 python3 reattach-to-user-namespace ruby-build socat sphinx-doc terraform tmux unrar watch wget wireshark
 brew tap caskroom/fonts
-brew cask install font-dejavusansmono-nerd-font-mono
+brew cask install font-dejavusansmono-nerd-font-mono fluro
 
 ansible-playbook install-playbook.yml -i hosts
