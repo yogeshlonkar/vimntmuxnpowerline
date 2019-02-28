@@ -1,6 +1,6 @@
 Vim, Tmux, Powerline, Aireline Automated Setup 
 =====================================
-This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline) & its fonts, [vim-airline](https://github.com/vim-airline/vim-airline), ruby, vim & tmux plugins, copy DOT files from this repo to user home directory using [Ansible](https://www.ansible.com/). It is [Tested On](#tested-on)
+This will instainstall brew, vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline) & its fonts, [vim-airline](https://github.com/vim-airline/vim-airline), ruby, vim & tmux plugins, copy DOT files from this repo to user home directory using [Ansible](https://www.ansible.com/). It is [Tested On](#tested-on)
 
 ### Requirements
 - [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html) >= 2.3
@@ -8,9 +8,8 @@ This will instainstall vim, tmux, [powerline](https://powerline.readthedocs.io/e
 ### Steps
 1. execute below
 ```Shell
-   ansible-playbook install-playbook.yml -i hosts --ask-become-pass
+   $ ./install
 ```
-` --ask-become-pass` is optional for mac
 
 
 ***Installation might take more than 30 minutes depending on your internet connection***
