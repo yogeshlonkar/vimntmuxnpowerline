@@ -1,0 +1,162 @@
+#!/bin/bash
+dir="$1"
+if [ ! -d "$1" ]; then
+  exit 1
+fi
+cd "$dir" > /dev/null
+if [[ "$(head -1 /tmp/.git-status-bar.cache 2>/dev/null)" == "$(stat -f "%m" .)" ]]; then
+  tail -1 /tmp/.git-status-bar.cache
+  exit 0
+fi
+if ! git status --no-ahead-behind --short >/dev/null 2>&1; then
+  exit 1
+fi
+
+# Manage remote updates every 15 minutes
+dir_id=$(echo -n $dir | base64)
+if ! [ -f /tmp/.git-remote-update.db ]; then
+sqlite3 /tmp/.git-remote-update.db <<EOF
+create table gru (id TEXT PRIMARY KEY, d INTEGER, e INTEGER);
+EOF
+fi
+last_remote_update=$(sqlite3 /tmp/.git-remote-update.db "select d from gru where id='${dir_id}'")
+[ -z $last_remote_update ] && last_remote_update=0
+remote_update_error=$(sqlite3 /tmp/.git-remote-update.db "select e from gru where id='${dir_id}'")
+[ -z $remote_update_error ] && remote_update_error=0
+curr_time=$(date +%s)
+stale_timeout=$(expr ${last_remote_update} + 3600)
+error_timeout=$(expr ${last_remote_update} + 15)
+success=0
+update_remote()
+{
+	echo $(date +%s) >> /tmp/execution.log
+	success=0;
+	git remote update
+	if (( $? )); then
+		success=1
+	fi
+    sqlite3 /tmp/.git-remote-update.db "insert or replace into gru (id, d, e) values ('${dir_id}', ${curr_time}, ${success})"
+}
+if (( curr_time > stale_timeout || remote_update_error && curr_time > error_timeout )); then
+	printf "#[fg=colour235,bg=colour114]       "
+	update_remote >/dev/null 2>&1 &
+	exit 0;
+fi
+sync_err=''
+if (( remote_update_error )); then
+  sync_err=''
+fi
+readonly gitstatus=$( LC_ALL=C git status --untracked-files=all --porcelain --branch )
+
+# if the status is fatal, exit now
+[[ "$?" -ne 0 ]] && exit 0
+
+num_deleted=0
+num_staged=0
+num_changed=0
+num_conflicts=0
+num_untracked=0
+num_ahead=0
+num_behind=0
+while IFS='' read -r line || [[ -n "$line" ]]; do
+  status=${line:0:2}
+  case "$status" in
+    '##')
+      if [[ $line = *"No commits yet"* ]]; then
+        # fixes #54 (garbage output on new repos)
+        line=$(echo $line | sed  "s/.*yet on //")
+      fi
+      branch_line="${line/\.\.\./^}" ;;
+    ?M) ((num_changed++)) ;;
+    ?D) ((num_deleted++)) ;;
+    U?) ((num_conflicts++)) ;;
+    \?\?) ((num_untracked++)) ;;
+    *) ((num_staged++)) ;;
+  esac
+done <<< "$gitstatus"
+
+num_stashed=0
+stash_file="$( git rev-parse --git-dir )/logs/refs/stash"
+if [[ -e "${stash_file}" ]]; then
+  while IFS='' read -r wcline || [[ -n "$wcline" ]]; do
+    ((num_stashed++))
+  done < "${stash_file}"
+fi
+
+IFS="^" read -ra branch_fields <<< "${branch_line/\#\# }"
+branch="${branch_fields[0]}"
+remote=
+upstream=
+
+if [[ "$branch" == *"Initial commit on"* ]]; then
+  IFS=" " read -ra fields <<< "$branch"
+  branch="${fields[3]}"
+  remote=""
+elif [[ "$branch" == *"no branch"* ]]; then
+  tag=$( git describe --exact-match )
+  if [[ -n "$tag" ]]; then
+    branch="$tag"
+  else
+    branch="_PREHASH_$( git rev-parse --short HEAD )"
+  fi
+else
+  if [[ "${#branch_fields[@]}" -eq 1 ]]; then
+    remote=""
+  else
+    IFS="[,]" read -ra remote_fields <<< "${branch_fields[1]}"
+    upstream="${remote_fields[0]}"
+    for remote_field in "${remote_fields[@]}"; do
+      if [[ "$remote_field" == *ahead* ]]; then
+        num_ahead=${remote_field:6}
+        ahead="${num_ahead}"
+      fi
+      if [[ "$remote_field" == *behind* ]]; then
+        num_behind=${remote_field:7}
+        behind="${num_behind}"
+      fi
+    done
+	remote="${behind}${ahead}"
+  fi
+fi
+
+clean=''
+if (( num_changed == 0 && num_staged == 0 && num_untracked == 0 && num_stashed == 0 && num_conflicts == 0 && num_deleted == 0 && num_ahead == 0 && num_behind == 0 )) ; then
+  clean=''
+fi
+
+if [[ -n "$remote" ]] && (( num_changed != 0 || num_staged != 0 || num_untracked == || num_stashed == 0 || num_conflicts == 0 || num_deleted )) ; then
+  remote="$remote|"
+fi
+if [[ -n "$sync_err" ]] ; then
+  sync_err="$sync_err|"
+fi
+if [[ -z "$upstream" ]] ; then
+  upstream=''
+fi
+trim1()
+{
+	arg1=$1
+	if (( arg1 == 0 )); then
+		arg1=''
+	else
+		arg1="$arg1$2"
+	fi
+	echo -n "$arg1"
+}
+num_changed=$(trim1 $num_changed "*")
+num_deleted=$(trim1 $num_deleted "-")
+num_conflicts=$(trim1 $num_conflicts "!")
+num_untracked=$(trim1 $num_untracked "")
+num_staged=$(trim1 $num_staged "﯁")
+num_stashed=$(trim1 $num_stashed "﮾")
+git_status=$(printf "%s%s%s%s%s%s%s%s%s" "$sync_err" "$remote" "$num_changed" "$num_deleted" "$num_conflicts" "$num_untracked" "$num_stashed" "$num_staged" "$clean")
+if [[ -n "$git_status" ]] ; then
+  git_status="$git_status "
+fi
+branch=$(echo $branch | sed -E -e 's/(features?)(\/.*)/F\2/g' -e 's/(hotfix)(\/.*)/H\2/g' -e 's/(releases?)(\/.*)/R\2/g' -e 's/(bugfix)(\/.*)/B\2/g' -e 's/(issues?)(\/.*)/I\2/g' | awk -v len=20 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
+printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status" 
+if (( success == 1 )); then
+  echo $(stat -f "%m" .) > /tmp/.git-status-bar.cache
+  printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status"  >> /tmp/.git-status-bar.cache
+fi
+

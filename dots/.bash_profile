@@ -9,11 +9,22 @@ export PS1="${LYELLOW}\u@\h:${CYAN}\W${PS_CLEAR}\$ "
 ### Default
 # export PS1=\h:\W \u\$
 
+# Useful functions
+function fstrigger()
+{
+	if [[ "$#" -ne 2 ]]; then
+		echo -e "Usage:\nfstrigger paths command\nExecute command on file/directory change event of given paths"
+		return 1
+	fi
+	fswatch -o $1 | while read -d 1; do `$2`; echo -e "\ndone"; done
+}
+
 # Alias
 alias hlt="helm template . | vim - \"+set filetype=yaml\""
 alias chrome-debug="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9229"
 alias docker-cleanup="docker rmi \$(docker images | grep -e \"<none>\" | awk '{print \$3}')"
 alias ll="ls -lShr"
+alias fstrigger=""
 
 # Environment variables
 [ -f "$(/usr/libexec/java_home 2>/dev/null)" ] && export JAVA_HOME=$(/usr/libexec/java_home) && export PATH="$JAVA_HOME/bin:$PATH"
@@ -23,11 +34,11 @@ alias ll="ls -lShr"
 if [ -d '/usr/local/lib/python2.7/site-packages' ]; then export POWERLINE_PACKAGE_DIR=/usr/local/lib/python2.7/site-packages; fi
 
 # bash completions
-[ -f '~/.git-completion.bash' ] && source ~/.git-completion.bash
-[ -f '~/google-cloud-sdk/path.bash.inc' ] && source '~/google-cloud-sdk/path.bash.inc'
-[ -f '~/google-cloud-sdk/completion.bash.inc' ] && source '~/google-cloud-sdk/completion.bash.inc'
-if [ type helm >/dev/null 2>&1 ]; then source <(helm completion bash); fi
+[ -f ~/google-cloud-sdk/path.bash.inc ] && source ~/google-cloud-sdk/path.bash.inc
+[ -f ~/google-cloud-sdk/completion.bash.inc ] && source ~/google-cloud-sdk/completion.bash.inc
+if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
 [ -f "$(brew --prefix)/etc/bash_completion" ] && . $(brew --prefix)/etc/bash_completion
+[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 [ -f '/usr/local/aws/bin/aws_completer' ] && complete -C '/usr/local/aws/bin/aws_completer' aws
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
