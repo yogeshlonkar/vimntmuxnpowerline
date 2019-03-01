@@ -96,6 +96,7 @@ let g:CommandTWildIgnore .= ',*/tmp'
 let g:ansible_options = {'ignore_blank_lines': 0}
 
 " close NERDTree after a file is opened
+let g:NERDTreeHighlightCursorline=0
 let g:NERDTreeQuitOnOpen=0
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
