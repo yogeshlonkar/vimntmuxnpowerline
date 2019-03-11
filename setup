@@ -27,11 +27,14 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 CYAN='\033[36m'
 GREEN='\033[32;1m'
 CLEAR='\033[0m'
-BLINK='\033[5m'
 CLEAR_LINE='\033[1K'
 RESET_CURSOR='\033[1000D'
 function log_info {
-  echo -ne $CYAN"$@"$BLINK'.'$CLEAR >$(tty)
+  if (( QUIET )); then
+	echo -ne $CYAN"$@"$CLEAR >$(tty)
+  else
+	echo -e $CYAN"$@"$CLEAR >$(tty)
+  fi
 }
 function log_success {
   echo -ne $CLEAR_LINE$RESET_CURSOR$GREEN"$@"$CLEAR'\n' >$(tty)
@@ -53,7 +56,7 @@ function brew_install_or_upgrade {
 export -f log_success
 export -f brew_install_or_upgrade
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  echo -e $CYAN"Setup ubuntu"$CLEAR >$(tty)
+  log_info "Setup ubuntu\n"
   sudo true
   if (( QUIET )); then
 	source ./setup-ubuntu >/dev/null 2>&1
@@ -61,7 +64,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	source ./setup-ubuntu
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  echo -e $CYAN"Setup macos"$CLEAR >$(tty)
+  log_info "Setup macos\n"
   if (( QUIET )); then
 	source ./setup-macos >/dev/null 2>&1
   else
