@@ -25,11 +25,11 @@ sudo apt-get -y install \
   lua5.1 
 log_success '√ Install vim build dependencies'
 git clone https://github.com/vim/vim.git vim_source
+old_dir=$(pwd)
+cd vim_source
 git checkout $(git rev-list --tags --max-count=1)
 rm -f vim_source/src/auto/config.cache
 log_success '√ Clone vim source'
-old_dir=$(pwd)
-cd vim_source
 make clean
 ./configure \
 	--enable-gui=auto \
