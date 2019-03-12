@@ -79,7 +79,7 @@ set smartindent
 set laststatus=2 " show the satus line all the time
 " space is space
 set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$,space:˙
-
+set backspace=indent,eol,start
 
 """"""""""""""""""""
 " plungins config  "

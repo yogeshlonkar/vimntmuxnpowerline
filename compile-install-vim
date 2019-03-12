@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -e
+sudo rm -rf vim_source
+sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get -y build-dep vim
+sudo apt-get -y install \
+  checkinstall \
+  python3-dev \
+  python-dev \
+  libperl-dev \
+  xorg-dev \
+  libncurses5-dev \
+  ruby-dev \
+  liblua5.2-dev \
+  libatk1.0-dev \
+  libbonoboui2-dev \
+  libcairo2-dev \
+  libgnome2-dev \
+  libgnomeui-dev \
+  libgtk2.0-dev \
+  libx11-dev \
+  libxpm-dev \
+  libxt-dev \
+  lua5.1 
+log_success '√ Install vim build dependencies'
+git clone https://github.com/vim/vim.git vim_source
+git checkout $(git rev-list --tags --max-count=1)
+rm -f vim_source/src/auto/config.cache
+log_succes '√ Clone vim source'
+old_dir=$(pwd)
+cd vim_source
+make clean
+./configure \
+	--enable-gui=auto \
+	--enable-perlinterp=yes \
+	--enable-luainterp=yes \
+	--enable-pythoninterp=yes \
+	--enable-python3interp=yes \
+	--enable-rubyinterp=yes \
+	--enable-cscope \
+	--enable-terminal \
+	--enable-autoservername \
+	--enable-multibyte \
+	--enable-xim \
+	--enable-fontset \
+	--enable-gnome-check \
+	--enable-gtk3-check \
+	--with-features=huge \
+	--with-x \
+	--with-compiledby="Yogesh Lonkar <lonkar.yogeshr@gmail.com>" 
+make -j8
+log_succes '√ Compile vim from source'
+sudo checkinstall --maintainer=lonkar.yogeshr@gmail.com </dev/null
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 100
+log_succes '√ Install vim-source pkg'
+cd $old_dir
+sudo rm -rf vim_source

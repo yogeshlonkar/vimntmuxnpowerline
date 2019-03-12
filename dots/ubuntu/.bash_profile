@@ -1,7 +1,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTCONTROL=ignoredups:erasedups
-export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+export PATH=/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH
 shopt -s histappend
 LYELLOW='\[\033[93m\]'
 CYAN='\[\033[36m\]'

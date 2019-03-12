@@ -4,7 +4,7 @@ log_info 'Install xcode...'
 xcode-select --install 2>/dev/null || true
 log_success '√ Install xcode'
 
-if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"; fi
+if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null; fi
 
 log_info 'Install brew packages...'
 brew_install_or_upgrade \
@@ -20,13 +20,13 @@ brew_install_or_upgrade \
   keychain \
   macvim \
   node \
-  openssl@1.1 \
   python3 \
   reattach-to-user-namespace \
   ruby-build \
   socat \
   tmux \
   watch \
+  sqlite3 \
   wget 
 brew tap caskroom/fonts
 brew cask install font-dejavusansmono-nerd-font-mono fluor

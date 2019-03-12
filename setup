@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 start_t=$(date +%s)
-UPGRADE=0
-QUIET=0
+export UPGRADE=0
+export QUIET=0
 POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
@@ -42,11 +42,11 @@ function log_success {
 function brew_install_or_upgrade {
   for package in "$@"
   do
-	if ! brew ls --versions "$package" >/dev/null; then
-	  HOMEBREW_NO_AUTO_UPDATE=1 brew install "$package"
+	if ! brew ls --versions "$package" >/dev/null </dev/null; then
+	  brew install "$package" </dev/null
 	else
 	  if (( UPGRADE )); then
-		HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade "$package" 2>/dev/null 2>/dev/null || true
+		brew upgrade "$package" </dev/null || true
 	  else
 		echo $package already installed
 	  fi

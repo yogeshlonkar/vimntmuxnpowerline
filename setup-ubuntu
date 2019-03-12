@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 set -e
-
 log_info 'Install apt packages...'
 sudo apt-get update
-sudo apt-get install -y build-essential curl file git cmake gcc python3 vim-gnome xclip font-manager linuxbrew-wrapper
+sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
+sudo apt-get install -y build-essential curl file git cmake gcc python3 python3-pip xclip font-manager linuxbrew-wrapper ruby-dev socat </dev/null
 log_success '√ Install apt packages'
 
+if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/null 2>&1; then
+  log_info 'Compile and install vim...'
+  source ./compile-install-vim
+  log_success '√ Compile and install vim'
+else
+  log_success "√ Vim already installed $(vim --version | head -1)"
+fi
 PATH=/home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew/vendor/portable-ruby/current/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 log_info 'Install brew packages...'
@@ -19,10 +26,8 @@ brew_install_or_upgrade \
   jq \
   keychain \
   node \
-  openssl@1.1 \
-  ruby-build \
-  socat \
   tmux \
+  sqlite3 \
   watch
 log_success '√ Install brew packages'
 
@@ -42,6 +47,7 @@ cd $old_dir
 rm -rf temp
 curr_profile=$(gsettings get org.gnome.Terminal.ProfilesList default | sed "s|'||g")
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$curr_profile/ font 'DejaVuSansMono Nerd Font Mono 12'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$curr_profile/ use-system-font false
 log_success '√ Install DejaVuSansMono Nerd font'
 
 log_info 'Copy dot files...'
