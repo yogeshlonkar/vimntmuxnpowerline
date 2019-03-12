@@ -2,10 +2,8 @@
 set -e
 sudo rm -rf vim_source
 sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-sudo apt-get clean
-sudo apt-get update
+sudo apt-get update --fix-missing
 sudo apt-get -y build-dep vim
-sudo apt-get update
 sudo apt-get -y install \
   checkinstall \
   python3-dev \
