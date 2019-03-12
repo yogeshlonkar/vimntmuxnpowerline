@@ -4,7 +4,6 @@ log_info 'Install apt packages...'
 sudo apt-get update --fix-missing
 sudo apt-get install -y build-essential curl file git cmake gcc python3 python3-pip xclip font-manager linuxbrew-wrapper ruby-dev socat </dev/null
 sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
-sudo apt-get autoremove -y
 log_success '√ Install apt packages'
 
 if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/null 2>&1; then
