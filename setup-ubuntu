@@ -13,6 +13,7 @@ if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/n
 else
   log_success "√ Vim already installed $(vim --version | head -1)"
 fi
+sudo apt-get autoremove -y
 PATH=/home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew/vendor/portable-ruby/current/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
 
 log_info 'Install brew packages...'
@@ -22,7 +23,6 @@ brew_install_or_upgrade \
   coreutils \
   figlet \
   fswatch \
-  git \
   jq \
   keychain \
   node \

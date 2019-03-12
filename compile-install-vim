@@ -27,7 +27,7 @@ log_success '√ Install vim build dependencies'
 git clone https://github.com/vim/vim.git vim_source
 git checkout $(git rev-list --tags --max-count=1)
 rm -f vim_source/src/auto/config.cache
-log_succes '√ Clone vim source'
+log_success '√ Clone vim source'
 old_dir=$(pwd)
 cd vim_source
 make clean
@@ -50,9 +50,9 @@ make clean
 	--with-x \
 	--with-compiledby="Yogesh Lonkar <lonkar.yogeshr@gmail.com>" 
 make -j8
-log_succes '√ Compile vim from source'
+log_success '√ Compile vim from source'
 sudo checkinstall --maintainer=lonkar.yogeshr@gmail.com </dev/null
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 100
-log_succes '√ Install vim-source pkg'
+sudo update-alternatives --install /usr/bin/editor editor `which vim` 100
+log_success '√ Install vim-source pkg'
 cd $old_dir
 sudo rm -rf vim_source
