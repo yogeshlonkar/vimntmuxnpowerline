@@ -30,7 +30,7 @@ if [ -d '/home/linuxbrew/.linuxbrew/Cellar/python/3.7.2_2/lib/python3.7/site-pac
 [ -f ~/google-cloud-sdk/path.bash.inc ] && source ~/google-cloud-sdk/path.bash.inc
 [ -f ~/google-cloud-sdk/completion.bash.inc ] && source ~/google-cloud-sdk/completion.bash.inc
 if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
-[ -f "$(brew --prefix)/etc/bash_completion" ] && . $(brew --prefix)/etc/bash_completion
+[[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && . "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
 [ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 [ -f '/usr/local/aws/bin/aws_completer' ] && complete -C '/usr/local/aws/bin/aws_completer' aws
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
