@@ -4,7 +4,25 @@ log_info 'Install apt packages...'
 echo "APT::Acquire::Retries \"4\";" | sudo tee /etc/apt/apt.conf.d/80-retries
 sudo apt-get autoclean
 sudo apt-get update --fix-missing
-sudo apt-get install -y build-essential curl file git cmake gcc python3 python3-pip xclip font-manager linuxbrew-wrapper ruby-dev socat </dev/null
+sudo apt-get install --only-upgrade bash
+sudo apt-get install -y \
+  git \
+  wget \
+  fswatch \
+  jq \
+  tmux \
+  build-essential \
+  curl \
+  cmake \
+  gcc \
+  python3 \
+  python3-pip \
+  xclip \
+  font-manager \
+  linuxbrew-wrapper \
+  ruby-dev \
+  socat \
+  sqlite3 </dev/null
 sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
 log_success '√ Install apt packages'
 
@@ -16,22 +34,6 @@ else
   log_success "√ Vim already installed $(vim --version | head -1)"
 fi
 sudo apt-get autoremove -y
-PATH=/home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew/vendor/portable-ruby/current/bin:/home/linuxbrew/.linuxbrew/bin:$PATH
-
-log_info 'Install brew packages...'
-brew_install_or_upgrade \
-  bash \
-  bash-completion \
-  coreutils \
-  figlet \
-  fswatch \
-  jq \
-  keychain \
-  node \
-  tmux \
-  sqlite3 \
-  watch
-log_success '√ Install brew packages'
 
 log_info 'Install DejaVuSansMono Nerd font...'
 old_dir=$(pwd)
@@ -61,7 +63,7 @@ pip3 install psutil pyuv i3ipc powerline-status
 log_success '√ Install python packages'
 
 log_info 'Clone Vundle...'
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim 2>/dev/null || true
+git clone --depth 1 https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim 2>/dev/null || true
 log_success '√ Clone Vundle'
 
 log_info 'Install vim plugins...'
@@ -73,7 +75,7 @@ make
 log_success '√ Install vim plugins'
 
 log_info 'Install tmux plugins...'
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
+git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
 ~/.tmux/plugins/tpm/bin/install_plugins
 powerline_pkg_dir=$(pip3 show powerline-status 2>/dev/null | grep Location | awk '{print $2}')
 sed -i -Ee "s|(POWERLINE_PACKAGE_DIR=).*|\1$powerline_pkg_dir|g" ~/.tmux.conf
