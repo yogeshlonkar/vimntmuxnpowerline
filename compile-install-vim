@@ -24,7 +24,7 @@ sudo apt-get -y install \
   libxt-dev \
   lua5.1 
 log_success '√ Install vim build dependencies'
-git clone https://github.com/vim/vim.git vim_source
+git clone --depth 1 https://github.com/vim/vim.git vim_source
 old_dir=$(pwd)
 cd vim_source
 git checkout $(git rev-list --tags --max-count=1)
