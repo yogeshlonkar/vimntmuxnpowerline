@@ -1,7 +1,6 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTCONTROL=ignoredups:erasedups
-export PATH=/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH
 shopt -s histappend
 LYELLOW='\[\033[93m\]'
 CYAN='\[\033[36m\]'
@@ -21,16 +20,13 @@ function fstrigger()
 }
 
 # Environment variables
-[ -d '/home/linuxbrew/.linuxbrew/Cellar/maven/3.6.0/' ] && export M2_HOME=/home/linuxbrew/.linuxbrew/Cellar/maven/3.6.0/libexec && export PATH="$M2_HOME/bin:$PATH"
 [ -d '/usr/local/opt/mongodb@3.6/' ] && export PATH="/usr/local/opt/mongodb@3.6/bin:$PATH"
 [ -d '/usr/local/opt/node' ] && export PATH="/usr/local/opt/node/bin:$PATH"
-if [ -d '/home/linuxbrew/.linuxbrew/Cellar/python/3.7.2_2/lib/python3.7/site-packages' ]; then export POWERLINE_PACKAGE_DIR=/home/linuxbrew/.linuxbrew/Cellar/python/3.7.2_2/lib/python3.7/site-packages; fi;
 
 # bash completions
 [ -f ~/google-cloud-sdk/path.bash.inc ] && source ~/google-cloud-sdk/path.bash.inc
 [ -f ~/google-cloud-sdk/completion.bash.inc ] && source ~/google-cloud-sdk/completion.bash.inc
 if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
-[[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && . "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
 [ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 [ -f '/usr/local/aws/bin/aws_completer' ] && complete -C '/usr/local/aws/bin/aws_completer' aws
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
