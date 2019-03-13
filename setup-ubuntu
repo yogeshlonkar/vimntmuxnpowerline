@@ -4,7 +4,9 @@ log_info 'Install apt packages...'
 echo "APT::Acquire::Retries \"4\";" | sudo tee /etc/apt/apt.conf.d/80-retries
 sudo apt-get autoclean
 sudo apt-get update --fix-missing
-sudo apt-get install --only-upgrade bash
+sleep 2s
+sudo apt-get install -y --only-upgrade bash
+sleep 2s
 sudo apt-get install -y \
   git \
   wget \
@@ -22,8 +24,10 @@ sudo apt-get install -y \
   linuxbrew-wrapper \
   ruby-dev \
   socat \
-  sqlite3 </dev/null
+  sqlite3
+sleep 2s
 sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
+sleep 2s
 log_success '√ Install apt packages'
 
 if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/null 2>&1; then
