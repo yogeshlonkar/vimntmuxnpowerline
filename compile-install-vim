@@ -49,7 +49,7 @@ make clean
 	--with-features=huge \
 	--with-x \
 	--with-compiledby="Yogesh Lonkar <lonkar.yogeshr@gmail.com>" 
-make -j8
+make -j16
 log_success '√ Compile vim from source'
 sudo checkinstall --maintainer=lonkar.yogeshr@gmail.com </dev/null
 sudo update-alternatives --install /usr/bin/editor editor `which vim` 100
