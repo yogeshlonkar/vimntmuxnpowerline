@@ -75,10 +75,10 @@ log_success '√ Clone Vundle'
 
 log_info 'Install vim plugins...'
 vim +PluginInstall +qall
-cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
-make clean 2>/dev/null || true
-ruby extconf.rb
-make -j16
+# cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+# make clean 2>/dev/null || true
+# ruby extconf.rb
+# make -j16
 log_success '√ Install vim plugins'
 
 log_info 'Install tmux plugins...'
