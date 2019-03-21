@@ -19,7 +19,7 @@ Plugin 'tpope/vim-commentary' " comment/uncomment lines with gcc or gc in visual
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'wincent/command-t'
+" Plugin 'wincent/command-t'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'mattn/emmet-vim'
 Plugin 'Chiel92/vim-autoformat'
@@ -122,6 +122,8 @@ map <C-h> :call WinMove('h')<cr>
 map <C-j> :call WinMove('j')<cr>
 map <C-k> :call WinMove('k')<cr>
 map <C-l> :call WinMove('l')<cr>
+nnoremap <leader>t :FZF<cr>
+nnoremap <leader>f :Ag<cr>
 
 " Window movement shortcuts
 " move to the window in the direction shown, or create a new window
