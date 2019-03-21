@@ -9,7 +9,8 @@ call vundle#begin()
 Plugin 'benmills/vimux'
 Plugin 'chriskempson/base16-vim'
 Plugin 'jelera/vim-javascript-syntax'
-Plugin 'kien/ctrlp.vim' " fuzzy find files
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'scrooloose/nerdtree'
