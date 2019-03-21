@@ -23,13 +23,13 @@ brew_install_or_upgrade \
   node \
   python3 \
   reattach-to-user-namespace \
-  ruby-build \
-  socat \
   sqlite3 \
   the_silver_searcher \
   tmux \
   watch \
   wget 
+# ruby-build \
+# socat \
 brew tap caskroom/fonts
 brew cask install font-dejavusansmono-nerd-font-mono fluor
 log_success '√ Install brew packages'
@@ -48,10 +48,10 @@ log_success '√ Clone Vundle'
 
 log_info 'Install vim plugins...'
 vim +PluginInstall +qall
-cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
-make clean 2>/dev/null || true
-ruby extconf.rb
-make
+# cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+# make clean 2>/dev/null || true
+# ruby extconf.rb
+# make
 log_success '√ Install vim plugins'
 
 log_info 'Install tmux plugins...'
