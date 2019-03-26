@@ -27,7 +27,6 @@ function fstrigger()
 [ -f ~/google-cloud-sdk/path.bash.inc ] && source ~/google-cloud-sdk/path.bash.inc
 [ -f ~/google-cloud-sdk/completion.bash.inc ] && source ~/google-cloud-sdk/completion.bash.inc
 if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
-[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 [ -f '/usr/local/aws/bin/aws_completer' ] && complete -C '/usr/local/aws/bin/aws_completer' aws
 [ -f '/usr/local/bin/vault' ] && complete -C /usr/local/bin/vault vault
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 log_info 'Install apt packages...'
-echo "APT::Acquire::Retries \"4\";" | sudo tee /etc/apt/apt.conf.d/80-retries
+echo "Acquire::Retries \"4\";" | sudo tee /etc/apt/apt.conf.d/80-retries
 sudo apt-get autoclean
 sudo apt-get update --fix-missing
 sleep 2s
@@ -28,8 +28,10 @@ sudo apt-get install -y \
   xclip
 sleep 2s
 sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+if ! [ -d ~/.fzf ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install </dev/null
+fi
 sleep 2s
 log_success '√ Install apt packages'
 
