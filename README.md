@@ -1,37 +1,61 @@
-Vim, Tmux, Powerline, Aireline Automated Setup 
+My Setup 
 =====================================
-This will instainstall brew, vim, tmux, [powerline](https://powerline.readthedocs.io/en/latest/index.html#powerline) & its fonts, [vim-airline](https://github.com/vim-airline/vim-airline), ruby, vim & tmux plugins, copy DOT files from this repo to user home directory using [Ansible](https://www.ansible.com/). It is [Tested On](#tested-on)
+Setup terminal environents for macos/ubuntu
 
-### Requirements
-- [Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html) >= 2.3
+![tmux-powerline-bar](tmux-bar.png)
 
-### Steps
-1. execute below
+## MacOS
+On macos below steps executed
+1. Install xcode
+1. Install brew and packages mainly macvim, python, git, bash, tmux
+1. Install nerdfonts required for custom tmux-powerline status bar
+1. Install Powerline_Pro theme. Default theme needs to be set manually
+1. Copy [common](dots/common) and [macos specific](dots/macos) dot files
+1. Install vim & tmux plugins
+
+## Ubuntu
+On ubuntu below steps executed
+1. Install apt packages mainly macvim, python, git, bash, tmux, build essentials
+1. Clone and compile vim from source
+1. Install DejaVuSansMono Nerd font required for custom tmux-powerline status bar
+1. Change default terminal font
+1. Copy [common](dots/common) and [macos specific](dots/macos) dot files
+1. Install vim & tmux plugins
+
+## Setup 
+Clone or download zip and Execute below in source directory
 ```Shell
-   $ ./install
+$ ./setup
 ```
+***Installation might take more than 30 minutes based on internet connection. In case of ubuntu might need execute setup multiple times if connection resets while downloading apt packages***
 
+## VIM - Custom Key bindings
+| Keys | Action/Description |
+| -- | -- |
+| <kbd>ctrl</kbd> + <kbd>c</kbd> | Copy visually selection to clipboard |
+| <kbd>ctrl</kbd> + <kbd>h</kbd> | Window Move Left |
+| <kbd>ctrl</kbd> + <kbd>j</kbd> | Window Move Down |
+| <kbd>ctrl</kbd> + <kbd>k</kbd> | Window Move Up |
+| <kbd>ctrl</kbd> + <kbd>l</kbd> | Window Move Right |
+| <kbd>ctrl</kbd> + <kbd>n</kbd> | Toggle nerd tree window|
+| <kbd>ctrl</kbd> + <kbd>e</kbd> | Show Current file in nerd tree |
+| <kbd>\\</kbd> then <kbd>t</kbd> | Search files in current workspace using `FZF` |
+| <kbd>\\</kbd> then <kbd>f</kbd> | Search file based on content in current workspace using `The silver search` |
+| <kbd>\\</kbd> then <kbd>l</kbd> | Show/Select open file list |
 
-***Installation might take more than 30 minutes depending on your internet connection***
-
-### Things done by ansible
-- It installs below through package manager
-  1. Tmux
-  1. Git
-  1. socat
-- Update [pip](https://pypi.python.org/pypi/pip)
-- Install vim flavour through package manager
-- Install below pip packages
-    1. psutil
-    1. pyuv
-    1. i3ipc
-    1. [powerline-status](https://powerline.readthedocs.io/en/latest/)
-- Install [Vundle](https://github.com/VundleVim/Vundle.vim) & [TPM](https://github.com/tmux-plugins/tpm)
-  - [Command-t](https://github.com/wincent/command-t) Plugin required Ruby so it is installed through package manager
-- Install [Powerline Fonts](https://github.com/powerline/fonts) using `/tmp/` direcory
-- Copy `.vimrc` to home directory & Install plugins defined in it
-- Copy `.tmux.conf` to home directory & Install plugins defined in it
-  - Add `POWERLINE_PACKAGE_DIR` env variable to
-    1. `/etc/environment` or `/etc/launchd.conf`
-    1. `.bashrc`
-    1. `~/.bash_profile`
+## TMUX - Custom Key bindings
+Mouse selection in tmux will auto copy selection to clipboard. All below keys send after tmux default send key <kbd>ctrl</kbd> + <kbd>b</kbd>
+| Keys | Actions/Description |
+| -- | -- |
+| <kbd>send-key</kbd> + <kbd>r</kbd> | Reloaded ~/.tmux.conf |
+| <kbd>send-key</kbd> + <kbd>\|</kbd> | Split Window horizontaly with current pwd |
+| <kbd>send-key</kbd> + <kbd>-</kbd> | Split Window verticaly with current pwd |
+| <kbd>send-key</kbd> + <kbd>y</kbd> | Synchronize all panes in current window |
+| <kbd>send-key</kbd> + <kbd>h</kbd> | Select Left pane |
+| <kbd>send-key</kbd> + <kbd>j</kbd> | Select Down pane |
+| <kbd>send-key</kbd> + <kbd>k</kbd> | Select Up pane |
+| <kbd>send-key</kbd> + <kbd>l</kbd> | Select Right pane |
+| <kbd>send-key</kbd> then <kbd>H</kbd> | Resize pane left  10 |
+| <kbd>send-key</kbd> then <kbd>J</kbd> | Resize pane down 10 |
+| <kbd>send-key</kbd> then <kbd>K</kbd> | Resize pane up 10 |
+| <kbd>send-key</kbd> then <kbd>L</kbd> | Resize pane right 10 |

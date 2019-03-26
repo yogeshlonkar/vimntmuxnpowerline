@@ -129,7 +129,7 @@ map <C-j> :call WinMove('j')<cr>
 map <C-k> :call WinMove('k')<cr>
 map <C-l> :call WinMove('l')<cr>
 map <C-n> :NERDTreeToggle<cr>
-map <C-b> :NERDTreeFind<cr>
+map <C-e> :NERDTreeFind<cr>
 nnoremap <leader>t :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 nnoremap <leader>l :Windows<cr>
