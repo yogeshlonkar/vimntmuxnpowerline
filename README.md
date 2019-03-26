@@ -19,7 +19,7 @@ On ubuntu below steps executed
 1. Clone and compile vim from source
 1. Install DejaVuSansMono Nerd font required for custom tmux-powerline status bar
 1. Change default terminal font
-1. Copy [common](dots/common) and [macos specific](dots/macos) dot files
+1. Copy [common](dots/common) and [macos specific](dots/ubuntu) dot files
 1. Install vim & tmux plugins
 
 ## Setup 
