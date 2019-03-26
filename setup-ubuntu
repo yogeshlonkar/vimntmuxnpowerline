@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -e
+log_info 'Install apt packages...'
+echo "Acquire::Retries \"4\";" | sudo tee /etc/apt/apt.conf.d/80-retries
+sudo apt-get autoclean
+sudo apt-get update --fix-missing
+sleep 2s
+sudo apt-get install -y --only-upgrade bash
+sleep 2s
+sudo apt-get install -y \
+  build-essential \
+  curl \
+  cmake \
+  font-manager \
+  fswatch \
+  gcc \
+  git \
+  jq \
+  linuxbrew-wrapper \
+  python3 \
+  python3-pip \
+  ruby-dev \
+  silversearcher-ag \
+  sqlite3 \
+  socat \
+  tmux \
+  wget \
+  xclip
+sleep 2s
+sudo apt-get purge -y vim vim-gnome vim-gtk vim-gtk3
+if ! [ -d ~/.fzf ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install </dev/null
+fi
+sleep 2s
+log_success '√ Install apt packages'
+
+if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/null 2>&1; then
+  log_info 'Compile and install vim...'
+  source ./compile-install-vim
+  log_success '√ Compile and install vim'
+else
+  log_success "√ Vim already installed $(vim --version | head -1)"
+fi
+sudo apt-get autoremove -y
+
+log_info 'Install DejaVuSansMono Nerd font...'
+old_dir=$(pwd)
+mkdir -p temp && cd temp
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Bold/complete/DejaVu%20Sans%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v1.0.0/patched-fonts/DejaVuSansMono/Bold/complete/DejaVu%20Sans%20Mono%20Bold%20Nerd%20Font%20Complete.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Bold-Italic/complete/DejaVu%20Sans%20Mono%20Bold%20Oblique%20Nerd%20Font%20Complete%20Mono.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Bold-Italic/complete/DejaVu%20Sans%20Mono%20Bold%20Oblique%20Nerd%20Font%20Complete.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Italic/complete/DejaVu%20Sans%20Mono%20Oblique%20Nerd%20Font%20Complete%20Mono.ttf
+wget --quiet https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v2.0.0/patched-fonts/DejaVuSansMono/Italic/complete/DejaVu%20Sans%20Mono%20Oblique%20Nerd%20Font%20Complete.ttf
+font-manager -i *
+cd $old_dir
+rm -rf temp
+curr_profile=$(gsettings get org.gnome.Terminal.ProfilesList default | sed "s|'||g")
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$curr_profile/ font 'DejaVuSansMono Nerd Font Mono 12'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$curr_profile/ use-system-font false
+log_success '√ Install DejaVuSansMono Nerd font'
+
+log_info 'Copy dot files...'
+cp -a dots/ubuntu/. dots/common/. ~/
+log_success '√ Copy dot files'
+
+log_info 'Install python packages..'
+pip3 install psutil pyuv i3ipc powerline-status
+log_success '√ Install python packages'
+
+log_info 'Clone Vundle...'
+git clone --depth 1 https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim 2>/dev/null || true
+log_success '√ Clone Vundle'
+
+log_info 'Install vim plugins...'
+vim +PluginInstall +qall
+# cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+# make clean 2>/dev/null || true
+# ruby extconf.rb
+# make -j16
+log_success '√ Install vim plugins'
+
+log_info 'Install tmux plugins...'
+git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
+~/.tmux/plugins/tpm/bin/install_plugins
+powerline_pkg_dir=$(pip3 show powerline-status 2>/dev/null | grep Location | awk '{print $2}')
+sed -i -Ee "s|(POWERLINE_PACKAGE_DIR=).*|\1$powerline_pkg_dir|g" ~/.tmux.conf
+log_success '√ Install tmux plugins'
+

@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -e
+log_info 'Install xcode...'
+xcode-select --install 2>/dev/null || true
+log_success '√ Install xcode'
+
+if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null; fi
+
+log_info 'Install brew packages...'
+brew_install_or_upgrade \
+  bash \
+  bash-completion \
+  cmake \
+  coreutils \
+  fzf \
+  figlet \
+  fswatch \
+  gcc \
+  git \
+  jq \
+  keychain \
+  macvim \
+  node \
+  python3 \
+  reattach-to-user-namespace \
+  sqlite3 \
+  the_silver_searcher \
+  tmux \
+  watch \
+  wget 
+# ruby-build \
+# socat \
+$(brew --prefix)/opt/fzf/install --all
+brew tap caskroom/fonts
+brew cask install font-dejavusansmono-nerd-font-mono fluor
+log_success '√ Install brew packages'
+
+log_info 'Set default terminal theme...'
+open terminal-theme/Powerline_Pro.terminal
+sudo -u $USER defaults write com.apple.Terminal.plist "Default Window Settings" "Powerline_Pro"
+sudo -u $USER defaults write com.apple.Terminal.plist "Startup Window Settings" "Powerline_Pro"
+log_success '√ Set default terminal theme'
+
+log_info 'Copy dot files...'
+cp -a dots/macos/. dots/common/. ~/
+log_success '√ Copy dot files'
+
+log_info 'Install python packages...'
+pip3 install psutil pyuv i3ipc powerline-status
+log_success '√ Install python packages'
+
+log_info 'Clone Vundle...'
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim 2>/dev/null || true
+log_success '√ Clone Vundle'
+
+log_info 'Install vim plugins...'
+vim +PluginInstall +qall
+# cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
+# make clean 2>/dev/null || true
+# ruby extconf.rb
+# make
+log_success '√ Install vim plugins'
+
+log_info 'Install tmux plugins...'
+mkdir -p ~/.tmux/plugins
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
+~/.tmux/plugins/tpm/bin/install_plugins
+powerline_pkg_dir=$(pip3 show powerline-status 2>/dev/null | grep Location | awk '{print $2}')
+sed -i -Ee "s|\(POWERLINE_PACKAGE_DIR=\).*|\1$powerline_pkg_dir|g" ~/.tmux.conf
+log_success '√ Install tmux plugins'
+

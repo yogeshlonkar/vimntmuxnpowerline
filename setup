@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+set -e
+start_t=$(date +%s)
+export UPGRADE=0
+export QUIET=0
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case $key in
+    -u|--upgrade)
+	UPGRADE=1
+    shift # past argument
+    ;;
+    -q|--quiet)
+	QUIET=1
+    shift # past argument
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+CYAN='\033[36m'
+GREEN='\033[32;1m'
+CLEAR='\033[0m'
+CLEAR_LINE='\033[1K'
+RESET_CURSOR='\033[1000D'
+function log_info {
+  if (( QUIET )); then
+	echo -ne $CYAN"$@"$CLEAR >$(tty)
+  else
+	echo -e $CYAN"$@"$CLEAR >$(tty)
+  fi
+}
+function log_success {
+  echo -ne $CLEAR_LINE$RESET_CURSOR$GREEN"$@"$CLEAR'\n' >$(tty)
+}
+function brew_install_or_upgrade {
+  for package in "$@"
+  do
+	if ! brew ls --versions "$package" >/dev/null </dev/null; then
+	  brew install "$package" </dev/null
+	else
+	  if (( UPGRADE )); then
+		brew upgrade "$package" </dev/null || true
+	  else
+		echo $package already installed
+	  fi
+	fi
+  done
+}
+export -f log_success
+export -f brew_install_or_upgrade
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  log_info "Setup ubuntu\n"
+  sudo true
+  if (( QUIET )); then
+	source ./setup-ubuntu >/dev/null 2>&1
+  else
+	source ./setup-ubuntu
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  log_info "Setup macos\n"
+  if (( QUIET )); then
+	source ./setup-macos >/dev/null 2>&1
+  else
+	source ./setup-macos
+  fi
+else
+  >&2 echo "$OSTYPE not supported"
+  exit 1
+fi
+end_t=$(date +%s)
+function displaytime {
+  printf "$CYAN"'Took: '
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  (( $D > 0 )) && printf '%d days ' $D
+  (( $H > 0 )) && printf '%d hours ' $H
+  (( $M > 0 )) && printf '%d minutes ' $M
+  (( $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+  printf "%d seconds\n$CLEAR" $S
+}
+displaytime $((end_t-start_t))
