@@ -45,6 +45,7 @@ $ ./setup
 
 ## TMUX - Custom Key bindings
 Mouse selection in tmux will auto copy selection to clipboard. All below keys send after tmux default send key <kbd>ctrl</kbd> + <kbd>b</kbd>
+
 | Keys | Actions/Description |
 | -- | -- |
 | <kbd>send-key</kbd> + <kbd>r</kbd> | Reloaded ~/.tmux.conf |
