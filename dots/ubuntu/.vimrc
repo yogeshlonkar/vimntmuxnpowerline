@@ -134,8 +134,8 @@ nmap <leader>p "_ciw<esc>p
 nnoremap <leader>t :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 nnoremap <leader>l :Windows<cr>
-map <C-i> <esc>:call ArgumentSubstitution()<cr>
-imap <C-i> <esc>:call ArgumentSubstitution()<cr>
+map <C-@> <esc>:call ArgumentSubstitution()<cr>
+imap <C-@> <esc>:call ArgumentSubstitution()<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""

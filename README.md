@@ -5,7 +5,7 @@ Setup terminal environments for macos/ubuntu
 ![tmux-powerline-bar](tmux-bar.png)
 
 ## MacOS
-On macos below steps executed
+On macos below steps executed environ
 1. Install xcode
 1. Install brew and packages mainly macvim, python, git, bash, tmux
 1. Install nerdfonts required for custom tmux-powerline status bar
@@ -40,7 +40,7 @@ $ ./setup
 | <kbd>ctrl</kbd> + <kbd>k</kbd> | Window Move Up |
 | <kbd>ctrl</kbd> + <kbd>l</kbd> | Window Move Right |
 | <kbd>ctrl</kbd> + <kbd>n</kbd> | Show Current file in nerd tree, if nerdtree already open close it |
-| <kbd>ctrl</kbd> + <kbd>u</kbd> | Function argument substitution, Moves cursor to next argument.<br/>![ctrl+u](ctrlplusu.gif) |
+| <kbd>ctrl</kbd> + <kbd>@</kbd> | Function argument substitution, Moves cursor to next argument.<br/>![ctrl+@](ctrlplusspace.gif) |
 | <kbd>\\</kbd> then <kbd>t</kbd> | Search files in current workspace using `FZF` |
 | <kbd>\\</kbd> then <kbd>f</kbd> | Search file based on content in current workspace using `The silver search` |
 | <kbd>\\</kbd> then <kbd>l</kbd> | Show/Select open file list |
