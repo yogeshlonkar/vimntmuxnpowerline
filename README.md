@@ -1,6 +1,6 @@
 My Setup 
 =====================================
-Setup terminal environents for macos/ubuntu
+Setup terminal environments for macos/ubuntu
 
 ![tmux-powerline-bar](tmux-bar.png)
 
@@ -32,16 +32,19 @@ $ ./setup
 ## VIM - Custom Key bindings
 | Keys | Action/Description |
 | -- | -- |
+| <kbd>F8</kbd> | Move cursor to next LspError or spell mistake if `set spell?` is `spell` |
+| <kbd>ctrl</kbd> + <kbd>c</kbd> | Copy visually selection to clipboard |
 | <kbd>ctrl</kbd> + <kbd>c</kbd> | Copy visually selection to clipboard |
 | <kbd>ctrl</kbd> + <kbd>h</kbd> | Window Move Left |
 | <kbd>ctrl</kbd> + <kbd>j</kbd> | Window Move Down |
 | <kbd>ctrl</kbd> + <kbd>k</kbd> | Window Move Up |
 | <kbd>ctrl</kbd> + <kbd>l</kbd> | Window Move Right |
-| <kbd>ctrl</kbd> + <kbd>n</kbd> | Toggle nerd tree window|
-| <kbd>ctrl</kbd> + <kbd>e</kbd> | Show Current file in nerd tree |
+| <kbd>ctrl</kbd> + <kbd>n</kbd> | Show Current file in nerd tree, if nerdtree already open close it |
+| <kbd>ctrl</kbd> + <kbd>u</kbd> | Function argument substitution, Moves cursor to next argument.<br/>![ctrl+u](ctrlplusu.gif) |
 | <kbd>\\</kbd> then <kbd>t</kbd> | Search files in current workspace using `FZF` |
 | <kbd>\\</kbd> then <kbd>f</kbd> | Search file based on content in current workspace using `The silver search` |
 | <kbd>\\</kbd> then <kbd>l</kbd> | Show/Select open file list |
+| <kbd>\\</kbd> then <kbd>p</kbd> | Replaces current word with content in register ". Executes motion `"_ciw<esc>p` |
 
 ## TMUX - Custom Key bindings
 Mouse selection in tmux will auto copy selection to clipboard. All below keys send after tmux default send key <kbd>ctrl</kbd> + <kbd>b</kbd>
@@ -49,8 +52,8 @@ Mouse selection in tmux will auto copy selection to clipboard. All below keys se
 | Keys | Actions/Description |
 | -- | -- |
 | <kbd>send-key</kbd> + <kbd>r</kbd> | Reloaded ~/.tmux.conf |
-| <kbd>send-key</kbd> + <kbd>\|</kbd> | Split Window horizontaly with current pwd |
-| <kbd>send-key</kbd> + <kbd>-</kbd> | Split Window verticaly with current pwd |
+| <kbd>send-key</kbd> + <kbd>\|</kbd> | Split Window horizontally with current pwd |
+| <kbd>send-key</kbd> + <kbd>-</kbd> | Split Window vertically with current pwd |
 | <kbd>send-key</kbd> + <kbd>y</kbd> | Synchronize all panes in current window |
 | <kbd>send-key</kbd> + <kbd>h</kbd> | Select Left pane |
 | <kbd>send-key</kbd> + <kbd>j</kbd> | Select Down pane |

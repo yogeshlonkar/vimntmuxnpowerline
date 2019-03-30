@@ -1,15 +1,14 @@
 set shell=/usr/bin/env\ bash
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible
+filetype off
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " Plugins start
 Plugin 'benmills/vimux'
 Plugin 'chase/vim-ansible-yaml'
-Plugin 'chriskempson/base16-vim'
 Plugin 'Chiel92/vim-autoformat'
+Plugin 'chriskempson/base16-vim'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
@@ -17,19 +16,19 @@ Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-fugitive' " the ultimate git helper
-Plugin 'tpope/vim-commentary' " comment/uncomment lines with gcc or gc in visual mode
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Plugins end
-call vundle#end()            " required
+call vundle#end()
 
-filetype plugin indent on    " required
+filetype plugin indent on
 
 if $TMUX == ''
-    set clipboard+=unnamed
+	set clipboard+=unnamed
 endif
 
 if &term == "screen"
@@ -40,42 +39,42 @@ endif
 set mouse=a
 syntax on
 set encoding=utf8
-let base16colorspace=256  " Access colors present in 256 colorspace"
-set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors"
+let base16colorspace=256
+set t_Co=256
 set background=dark
 colorscheme delek
 
 " indentation
-set noexpandtab " tabs ftw
-set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
-set tabstop=4 " the visible width of tabs
-set softtabstop=4 " edit as if the tabs are 4 characters wide
-set shiftwidth=2 " number of spaces to use for indent and unindent
-set shiftround " round indent to a multiple of 'shiftwidth'
-set autoindent " for new line
+set noexpandtab
+set smarttab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set shiftround
+set autoindent
 set smartindent
 
 " code folding settings
-set foldmethod=manual " fold based on indent
-set foldnestmax=10 " deepest fold is 10 levels
-set nofoldenable " don't fold by default
+set foldmethod=manual
+set foldnestmax=10
+set nofoldenable
 set foldlevel=1
 
 " Searching
 set ignorecase
-set smartcase " case-sensitive if expresson contains a capital letter
+set smartcase
 set hlsearch
 set incsearch
-set nolazyredraw " don't redraw while executing macros
-set showmatch " show matching braces
-set mat=2 " how many tenths of a second to blink
+set nolazyredraw
+set showmatch
+set mat=2
 
 " space is space
 set listchars=tab:▸\ ,trail:☠,nbsp:•,precedes:←,extends:→,eol:$,space:˙
 
 
 set number
-set laststatus=2 " show the satus line all the time
+set laststatus=2
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -92,27 +91,27 @@ let g:NERDTreeChDirMode=2
 
 " expand to the path of the file in the current buffer
 let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "*",
-    \ "Staged"    : "﯁",
-    \ "Untracked" : "",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "!",
-    \ "Deleted"   : "-",
-    \ "Dirty"     : "",
-    \ "Clean"     : "",
-    \ 'Ignored'   : '',
-    \ "Unknown"   : ""
-    \ }
+			\ "Modified"  : "*",
+			\ "Staged"    : "﯁",
+			\ "Untracked" : "",
+			\ "Renamed"   : "➜",
+			\ "Unmerged"  : "!",
+			\ "Deleted"   : "-",
+			\ "Dirty"     : "",
+			\ "Clean"     : "",
+			\ 'Ignored'   : '',
+			\ "Unknown"   : ""
+			\ }
 " fzf
 
 let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore node_modules --ignore Library --ignore static-builds -U -g ""'
 
 " mattn/emmet-vim
 let g:user_emmet_settings = {
-    \  'javascript' : {
-    \    'extends' : 'jsx',
-    \  },
-    \}
+			\  'javascript' : {
+			\    'extends' : 'jsx',
+			\  },
+			\}
 
 " vim-airline/vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -123,16 +122,19 @@ let g:airline_theme='deus'
 " => Custom Key mapping
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "copy usint ctrl+c while in visual mode
-vmap <C-c> "+y
+map <f8> :call NextIssue()<cr>
 map <C-h> :call WinMove('h')<cr>
 map <C-j> :call WinMove('j')<cr>
 map <C-k> :call WinMove('k')<cr>
 map <C-l> :call WinMove('l')<cr>
-map <C-n> :NERDTreeToggle<cr>
-map <C-e> :NERDTreeFind<cr>
+map <expr> <C-n> g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
+vmap <C-c> "+y<cr>
+nmap <leader>p "_ciw<esc>p
 nnoremap <leader>t :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 nnoremap <leader>l :Windows<cr>
+map <C-u> <esc>:call ArgumentSubstitution()<cr>
+imap <C-u> <esc>:call ArgumentSubstitution()<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -141,20 +143,85 @@ nnoremap <leader>l :Windows<cr>
 " Window movement shortcuts
 " move to the window in the direction shown, or create a new window
 function! WinMove(key)
-    let t:curwin = winnr()
-    exec "wincmd ".a:key
-    if (t:curwin == winnr())
-        if (match(a:key,'[jk]'))
-            wincmd v
-        else
-            wincmd s
-        endif
-        exec "wincmd ".a:key
-    endif
+	let t:curwin = winnr()
+	exec "wincmd ".a:key
+	if (t:curwin == winnr())
+		if (match(a:key,'[jk]'))
+			wincmd v
+		else
+			wincmd s
+		endif
+		exec "wincmd ".a:key
+	endif
+endfunction
+
+function! NextIssue() abort
+	let l:hasLspError = 0
+	if exists(":LspNextError")
+		exec ':LspNextError'
+		let l:hasLspError = lsp#ui#vim#diagnostics#get_diagnostics_under_cursor()
+	endif
+	if &spell && l:hasLspError == 0
+		normal! ]s
+	endif
+endfunction
+
+function! ArgumentSubstitution()
+	let l:currcol = col('.')
+	let l:currline = getline('.')
+	let l:currchar = l:currline[l:currcol-1]
+	let l:prevtocurrcol = join(reverse(split(strpart(l:currline,0, l:currcol), '.\zs')), '')
+	let l:preopeningparetheses = matchend(l:prevtocurrcol, '(')
+	let l:nextcomma = matchend(strpart(l:currline, l:currcol), ',')
+	if l:currchar == ','
+		normal! l
+	elseif l:nextcomma > -1 && l:nextcomma < l:preopeningparetheses
+		normal! f,l
+	elseif l:preopeningparetheses == -1
+		let l:nextopeningparetheses = matchend(strpart(l:currline, l:currcol), '(')
+		if l:nextopeningparetheses == -1
+			return
+		else
+			normal! f(l
+		endif
+	else
+		normal! F(l
+	endif
+	let l:currcol = col('.')
+	let l:currpos = getpos('.')[0:2]
+	let l:nextcomma = matchend(strpart(l:currline, l:currcol), ',')
+	let l:nextclosingparetheses = matchend(strpart(l:currline, l:currcol), ')')
+	if l:nextcomma != -1 && l:nextcomma < l:nextclosingparetheses
+		let l:nextcol = l:currcol + l:nextcomma - 1
+	else
+		let l:nextcol = l:currcol + l:nextclosingparetheses - 1
+	endif
+	let l:newpos = add(l:currpos[0:1], l:nextcol)
+	call setpos("'<", l:currpos)
+	call setpos("'>", l:newpos)
+	normal! gv
+endfunction
+
+function! RemoveTrailingSpaces()
+	execute '%s/ *$//g'
 endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocmd
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd BufNewFile,BufReadPost *.{md,txt},README setlocal spell
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=ansible foldmethod=indent
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Disable Arrow keys in Insert & Escape mode :D
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
