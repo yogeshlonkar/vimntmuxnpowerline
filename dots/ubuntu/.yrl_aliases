@@ -1,0 +1,11 @@
+# vim: set ft=bash:
+# aliases
+
+alias temp="cd ~/temp"
+alias hlt="helm template . | vim - \"+set filetype=yaml\""
+alias chrome-debug="chrome --remote-debugging-port=9229"
+alias docker-cleanup="docker rmi \$(docker images | grep -e \"<none>\" | awk '{print \$3}')"
+alias docker_rit='docker run --rm -it '
+alias op_sign='eval $(op signin my)'
+alias xclip="xclip -sel clip"
+alias pbcopy="xclip -sel clip"

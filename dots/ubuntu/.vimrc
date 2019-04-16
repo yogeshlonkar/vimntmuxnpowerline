@@ -210,6 +210,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocmd
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType gitcommit setlocal spell
 autocmd BufNewFile,BufReadPost *.{md,txt},README setlocal spell
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=ansible foldmethod=indent
 

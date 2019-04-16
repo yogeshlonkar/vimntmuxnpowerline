@@ -3,6 +3,9 @@ SECS=$(date +%s)
 HEART='♥'
 EMPTY_HEART=''
 HALF_HEART='ﯜ'
+# if [[ "$(date +%s)" != *"60" ]]; then
+#   return 0
+# fi
 
 if [[ `uname` == 'Linux' ]]; then
   current_charge=$(cat /sys/class/power_supply/BAT0/capacity)
