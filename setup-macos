@@ -17,6 +17,7 @@ brew_install_or_upgrade \
   fswatch \
   gcc \
   git \
+  go \
   jq \
   keychain \
   macvim \
@@ -28,11 +29,14 @@ brew_install_or_upgrade \
   tmux \
   watch \
   wget 
-# ruby-build \
-# socat \
 $(brew --prefix)/opt/fzf/install --all
 brew tap caskroom/fonts
 brew cask install font-dejavusansmono-nerd-font-mono fluor
+op_version=v0.6.2
+curl -OL https://cache.agilebits.com/dist/1P/op/pkg/${op_version}/op_darwin_amd64_${op_version}.zip
+unzip op_darwin_amd64_${op_version}.zip
+mv op /usr/local/bin/
+rm op.sig op_darwin_amd64*
 log_success '√ Install brew packages'
 
 log_info 'Set default terminal theme...'
@@ -55,10 +59,6 @@ log_success '√ Clone Vundle'
 
 log_info 'Install vim plugins...'
 vim +PluginInstall +qall
-# cd ~/.vim/bundle/command-t/ruby/command-t/ext/command-t
-# make clean 2>/dev/null || true
-# ruby extconf.rb
-# make
 log_success '√ Install vim plugins'
 
 log_info 'Install tmux plugins...'

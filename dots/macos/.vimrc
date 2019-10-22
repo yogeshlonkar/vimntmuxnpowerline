@@ -208,8 +208,6 @@ function! NextIssue() abort
   endif
 endfunction
 
-"asdad somethi ngsometihng"
-
 function! WrapIn(to, default)
   " TODO: fix bug with word on end of the line
   let l:from = input("Replace " . a:to . " with --> ", a:default)

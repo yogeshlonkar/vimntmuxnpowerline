@@ -15,6 +15,7 @@ sudo apt-get install -y \
   fswatch \
   gcc \
   git \
+  go \
   jq \
   linuxbrew-wrapper \
   python3 \
@@ -33,6 +34,11 @@ if ! [ -d ~/.fzf ]; then
   ~/.fzf/install </dev/null
 fi
 sleep 2s
+op_version=v0.6.2
+curl -OL https://cache.agilebits.com/dist/1P/op/pkg/${op_version}/op_linux_amd64_${op_version}.zip
+unzip op_linux_amd64_${op_version}.zip
+mv op /usr/local/bin/
+rm op.sig op_linux_amd64*
 log_success '√ Install apt packages'
 
 if (( UPGRADE )) || ! vim --version 2>&1 | grep lonkar.yogeshr@gmail.com >/dev/null 2>&1; then
