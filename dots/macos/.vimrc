@@ -163,6 +163,8 @@ nnoremap <leader>f :Ag<cr>
 nnoremap <leader>l :ls<CR>:b<Space>
 map <C-@> <esc>:call ArgumentSubstitution()<cr>
 imap <C-@> <esc>:call ArgumentSubstitution()<cr>
+nmap gt :bn<cr>
+nmap gT :bN<cr>
 
 "replace brackets, quotes
 nmap <leader>r' :call WrapIn("'", "\"")<cr>
@@ -171,6 +173,11 @@ nmap <leader>r` :call WrapIn("`", "w")<cr>
 nmap <leader>r{ :call WrapIn("{", "w")<cr>
 nmap <leader>r[ :call WrapIn("[", "w")<cr>
 nmap <leader>r( :call WrapIn("(", "w")<cr>
+
+:command WQ wq
+:command Wq wq
+:command W w
+:command Q q
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Functions
@@ -204,8 +211,9 @@ endfunction
 "asdad somethi ngsometihng"
 
 function! WrapIn(to, default)
+  " TODO: fix bug with word on end of the line
   let l:from = input("Replace " . a:to . " with --> ", a:default)
-  echomsg "from --> " . l:from . " to --> " . a:to
+  echomsg "WrapIn from --> " . l:from . " to --> " . a:to
   let include = strpart(l:from, 1, 1)
   let l:from = strpart(l:from, 0, 1)
   let l:winview = winsaveview()
