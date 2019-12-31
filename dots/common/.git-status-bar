@@ -157,7 +157,7 @@ else
     if [[ -n "$git_status" ]] ; then
       git_status="$git_status "
     fi
-    branch=$(echo $branch | sed -E -e 's/(features?)(\/.*)/F\2/g' -e 's/(hotfix)(\/.*)/H\2/g' -e 's/(releases?)(\/.*)/R\2/g' -e 's/(bugfix)(\/.*)/B\2/g' -e 's/(issues?)(\/.*)/I\2/g' | awk -v len=20 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
+    branch=$(echo $branch | sed -E -e 's/(features?)(\/.*)/F\2/g' -e 's/(hotfix)(\/.*)/H\2/g' -e 's/(releases?)(\/.*)/R\2/g' -e 's/(bugfix)(\/.*)/B\2/g' -e 's/(issues?)(\/.*)/I\2/g' | awk -v len=50 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
     printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status"
     if (( success == 1 )); then
       echo $(stat -f "%m" .) > /tmp/.git-status-bar.cache

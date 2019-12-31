@@ -10,5 +10,7 @@ if type helm >/dev/null 2>&1; then source <(helm completion bash); fi
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
 [ -f '/usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash' ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 export PROG="dazn source /.../cli/autocomplete/bash_autocomplete"
 source ~/bash_autocomplete

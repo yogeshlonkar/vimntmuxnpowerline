@@ -3,8 +3,7 @@
 
 function fstrigger()
 {
-  local re delay to_watch to_execute red green lockfile
-  lockfile="${HOME}/.fstrigger_$((1 + RANDOM % 10000))"
+  local re delay to_watch to_execute red green
 
   re='^[0-9]+$'
   if [[ ${1} =~ ${re} ]] ; then
@@ -20,26 +19,14 @@ function fstrigger()
      to_watch=`pwd`
      to_execute=${@}
   fi
-
-  function yrl_locked_command()
-  {
-	if (set -o noclobber; echo "$$" > "${lockfile}") 2> /dev/null; then
-	  trap 'rm -f "$lockfile"; exit $?' INT TERM EXIT
-      echo -e "\033[1;36mtriggered\033[0m"
-      color=${red}
-      eval ${to_execute[@]} && color=${green} || true
-      echo -e "\n${color}trigger-finished\033[0m\n"
-      sleep ${delay}
-      # _lock u;
-	  rm -f "${lockfile}"
-	  trap - INT TERM EXIT
-    fi
-  }
   red='\033[1;31m'
   green='\033[1;32m'
   echo "Watching ${to_watch} with delay ${delay} lockfile ${lockfile}"
   fswatch -e *.swp -xnr ${to_watch} | while read -d 1; do
-    yrl_locked_command &
+      echo -e "\033[1;36mtriggered\033[0m"
+      color=${red}
+      eval ${to_execute[@]} && color=${green} || true
+      echo -e "\n${color}trigger-finished\033[0m\n"
   done
 }
 
@@ -52,17 +39,33 @@ function sanitize()
   done
 }
 
+function check_op_session()
+{
+  source ~/.yrl_environment
+  curr_time=$(date +%s)
+  time_left=$(( $OP_SESSION_TIME - $curr_time ))
+  if [[ -z "${OP_SESSION_my}" ]] || (( $time_left < 60 )); then
+    unset OP_SESSION_my
+    while [[ -z "$OP_SESSION_my" ]]; do
+      OP_SESSION_my=$(op signin my --output=raw)
+    done
+    export OP_SESSION_my=$OP_SESSION_my
+    export OP_SESSION_TIME=$(( $curr_time + 1800 ))
+    sed -i -e "s/export OP_SESSION_my=.*/export OP_SESSION_my=$OP_SESSION_my/g" ~/.yrl_environment
+    sed -i -e "s/export OP_SESSION_TIME=.*/export OP_SESSION_TIME=$OP_SESSION_TIME/g" ~/.yrl_environment
+  fi
+}
+
 function mfa()
 {
-  if [[ -z "${OP_SESSION_my}" ]]; then
-   eval $(op signin my)
-  fi
+  check_op_session
   echo "MFA copied, valid for $(expr 30 - $(date +%s) % 30)s"
   op get totp rkdtjsgg4raf3p4b2zlxvpskay | pbcopy
 }
 
-function gpg_pass()
+function getgpgpass()
 {
+  check_op_session
   op get item "GPG Passphrase" | jq -r '.details.password' | pbcopy
 }
 
@@ -85,7 +88,18 @@ function git_branch_cleanup()
     git branch -va | grep gone | awk '{print $1}' | xargs git branch -D
   else
     git branch -va | grep gone
-    echo 'For cleanup run git_branch_cleanup -f'
+    if [[ `git branch -va | grep gone | wc -l` -gt 0 ]]; then
+      local answer
+      if [ -n "$ZSH_VERSION" ]; then
+        read -q "answer?Delete all of these?"
+      else
+        read -p "Delete all of these?" answer
+      fi
+      echo -en "\n"
+      case $answer in
+        [Yy]* ) git branch -va | grep gone | awk '{print $1}' | xargs git branch -D;
+      esac
+    fi
   fi
 }
 
@@ -101,7 +115,8 @@ function touchy()
   fi
 }
 
-function _print_script_with_sources() {
+function _print_script_with_sources()
+{
   local script_to_read=$(eval "realpath ${1}" 2>/dev/null)
   local padding=${2}
   if ! [[ -f "${script_to_read}" ]]; then
@@ -124,6 +139,8 @@ function _print_script_with_sources() {
   done
 }
 
-function _bash_profile() {
+function _bash_profile()
+{
   _print_script_with_sources ~/.bash_profile
 }
+

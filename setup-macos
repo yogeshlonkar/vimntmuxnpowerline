@@ -8,13 +8,12 @@ if [ -z "$(type brew 2>/dev/null)" ]; then /usr/bin/ruby -e "$(curl -fsSL https:
 
 log_info 'Install brew packages...'
 brew_install_or_upgrade \
-  bash \
-  bash-completion \
+  autojump \
   cmake \
   coreutils \
-  fzf \
   figlet \
   fswatch \
+  fzf \
   gcc \
   git \
   go \
@@ -28,21 +27,29 @@ brew_install_or_upgrade \
   the_silver_searcher \
   tmux \
   watch \
-  wget 
+  wget
 $(brew --prefix)/opt/fzf/install --all
 brew tap caskroom/fonts
-brew cask install font-dejavusansmono-nerd-font-mono fluor
-op_version=v0.6.2
+brew cask install font-dejavusansmono-nerd-font-mono
+op_version=v0.8.0
 curl -OL https://cache.agilebits.com/dist/1P/op/pkg/${op_version}/op_darwin_amd64_${op_version}.zip
 unzip op_darwin_amd64_${op_version}.zip
 mv op /usr/local/bin/
 rm op.sig op_darwin_amd64*
 log_success '√ Install brew packages'
 
+log_info 'Install zsh...'
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+cp -a zsh/themes/yogeshlonkar.zsh-theme ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes
+log_success '√ Install zsh'
+
 log_info 'Set default terminal theme...'
-open terminal-theme/Powerline_Pro.terminal
-sudo -u $USER defaults write com.apple.Terminal.plist "Default Window Settings" "Powerline_Pro"
-sudo -u $USER defaults write com.apple.Terminal.plist "Startup Window Settings" "Powerline_Pro"
+open terminal-theme/Default.terminal
+sudo -u $USER defaults write com.apple.Terminal.plist "Default Window Settings" "Default"
+sudo -u $USER defaults write com.apple.Terminal.plist "Startup Window Settings" "Default"
 log_success '√ Set default terminal theme'
 
 log_info 'Copy dot files...'

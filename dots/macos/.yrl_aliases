@@ -7,4 +7,3 @@ alias chrome-debug="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chro
 alias docker-cleanup="docker rmi \$(docker images | grep -e \"<none>\" | awk '{print \$3}')"
 alias ll="ls -lShr"
 alias docker_rit="docker run --rm -it "
-alias op_sign='eval $(op signin my)'

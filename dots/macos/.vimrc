@@ -2,6 +2,7 @@ set shell=/usr/bin/env\ bash
 set nocompatible
 filetype off
 
+set rtp+=/usr/local/opt/fzf
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " Plugins start
@@ -14,8 +15,6 @@ Plugin 'stephpy/vim-yaml'
 Plugin 'chriskempson/base16-vim'
 Plugin 'fatih/vim-go'
 Plugin 'hashivim/vim-terraform'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
@@ -60,10 +59,10 @@ set autoindent
 set smartindent
 
 " code folding settings
-set foldmethod=manual
+set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
-set foldlevel=1
+set foldlevel=2
 
 " Searching
 set ignorecase
@@ -127,7 +126,7 @@ let g:NERDTreeIndicatorMapCustom = {
       \ "Unknown"   : ""
       \ }
 " fzf
-let $FZF_DEFAULT_COMMAND='ag --hidden --ignore *.swp --ignore .git --ignore node_modules --ignore Library --ignore static-builds -U -g ""'
+let $FZF_DEFAULT_COMMAND='ag --hidden --ignore \*.swp --ignore .git --ignore node_modules/ -U -g ""'
 
 " hashivim/vim-terraform
 let g:terraform_align=1
@@ -279,7 +278,10 @@ function! ToggleBuffer()
   execute ':e #'
 endfunction
 
-
+augroup javascript_folding
+  au!
+  au FileType javascript setlocal foldmethod=syntax
+augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocmd
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
