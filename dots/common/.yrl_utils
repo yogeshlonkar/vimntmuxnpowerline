@@ -144,3 +144,7 @@ function _bash_profile()
   _print_script_with_sources ~/.bash_profile
 }
 
+function help()
+{
+  bash -c "help $@"
+}
