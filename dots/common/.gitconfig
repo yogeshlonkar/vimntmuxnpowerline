@@ -25,9 +25,9 @@
   ci = commit -v
   co = checkout
   st = status
-  ca = commit --amend
+  ca = commit -v --amend
   can= commit --amend --no-edit
 [pager]
 	log = false
-	diff = false
+	diff = true
 	branch = false

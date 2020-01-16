@@ -1,32 +1,23 @@
 # vim: set ft=bash:
 # utility functions
-
 function fstrigger()
 {
-  local re delay to_watch to_execute red green
-
-  re='^[0-9]+$'
-  if [[ ${1} =~ ${re} ]] ; then
-    delay=${1}
-    set -- "${@:2}"
-  else
-    delay=2
-  fi
+  local to_watch to_execute red green
   if [[ -f ${1} || -d ${1} ]]; then
      to_watch=${1}
      to_execute=${@:2}
   else
-     to_watch=`pwd`
-     to_execute=${@}
+    to_watch=$(pwd)
+    to_execute=${@}
   fi
   red='\033[1;31m'
   green='\033[1;32m'
-  echo "Watching ${to_watch} with delay ${delay} lockfile ${lockfile}"
-  fswatch -e *.swp -xnr ${to_watch} | while read -d 1; do
-      echo -e "\033[1;36mtriggered\033[0m"
-      color=${red}
-      eval ${to_execute[@]} && color=${green} || true
-      echo -e "\n${color}trigger-finished\033[0m\n"
+  echo "Watching ${to_watch}"
+  while fswatch -e '*.swp' -1 -xnr ${to_watch} >/dev/null 2>&1; do
+    echo -e "\033[1;36mFile change triggered\033[0m"
+    color=${red}
+    eval "${to_execute[@]}" && color=${green} || true
+    echo -e "\n${color}Trigger finished\033[0m\n"
   done
 }
 

@@ -7,11 +7,10 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " Plugins start
 Plugin 'Chiel92/vim-autoformat'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'benmills/vimux'
-Plugin 'stephpy/vim-yaml'
 Plugin 'chriskempson/base16-vim'
 Plugin 'fatih/vim-go'
 Plugin 'hashivim/vim-terraform'
@@ -20,6 +19,8 @@ Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'scrooloose/nerdtree'
+Plugin 'stephpy/vim-yaml'
+Plugin 'ternjs/tern_for_vim', { 'for': 'javascript' }
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
@@ -107,6 +108,7 @@ function! PreviewWindowPosition()
 endfunction
 
 " scrooloose/nerdtree
+let NERDTreeIgnore=['.git$[[dir]]', '.swp']
 let g:NERDTreeHighlightCursorline=0
 let g:NERDTreeQuitOnOpen=0
 let g:NERDTreeShowHidden=1
@@ -157,8 +159,8 @@ map <C-l> :call WinMove('l')<cr>
 map <expr> <C-n> g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
 vmap <C-c> "+y<cr>
 nmap <leader>p "_ciw<esc>p
-nnoremap <leader>t :FZF<cr>
-nnoremap <leader>f :Ag<cr>
+nnoremap <leader>f :FZF<cr>
+nnoremap <leader>F :Ag<cr>
 nnoremap <leader>l :ls<CR>:b<Space>
 map <C-@> <esc>:call ArgumentSubstitution()<cr>
 imap <C-@> <esc>:call ArgumentSubstitution()<cr>

@@ -6,9 +6,11 @@ export HISTCONTROL=ignoredups:erasedups
 
 [ -d '/usr/local/lib/python2.7/site-packages' ] &&  export POWERLINE_PACKAGE_DIR=/usr/local/lib/python2.7/site-packages
 
+export DRONE_SERVER="https://drone.daznplatform.com"
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:/Users/yogesh/go/bin
 export GPG_TTY=$(tty)
+export VAULT_ADDR='https://this.vault.indazn.com'
 export NVM_DIR="$HOME/.nvm"
 export OP_SESSION_TIME=
 export OP_SESSION_my=
