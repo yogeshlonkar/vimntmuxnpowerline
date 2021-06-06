@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+bg_vim=($(pgrep -P $1 | xargs ps -o stat=,command= | grep -oe '^T\s\+.*/macvim'))
+bg_nvim=($(pgrep -P $1 | xargs ps -o stat=,command= | grep -oe '^T\s\+nvim'))
+to_print="#[fg=colour114]"
+if [[ ${#bg_vim[@]} -gt 0 ]]; then
+  to_print+="im"
+fi
+if [[ ${#bg_nvim[@]} -gt 0 ]]; then
+  if [[ ${#bg_vim[@]} -gt 0 ]]; then
+    to_print+="|"
+  fi
+  to_print+="nim"
+fi
+echo $to_print

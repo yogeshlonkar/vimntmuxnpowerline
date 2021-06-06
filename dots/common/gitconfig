@@ -2,8 +2,7 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Yogesh Lonkar
-	email = lonkar.yogeshr@gmail.com
-	signingkey = A08E266247F12F6A
+	email = yogesh@lonkar.org
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -11,13 +10,12 @@
 	required = true
 [credential]
 	helper = cache
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
+[url "ssh://git@github.com"]
+	insteadOf = https://github.com
 [remote "origin"]
 	prune = true
-[commit]
-	gpgsign = true
 [core]
+	excludesfile = /Users/yogesh/.gitignore
 [alias]
   aa = add --all
   ap = add --patch
@@ -31,3 +29,5 @@
 	log = false
 	diff = true
 	branch = false
+[init]
+	defaultBranch = main

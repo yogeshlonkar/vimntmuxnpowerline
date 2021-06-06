@@ -1,52 +1,45 @@
-set shell=/usr/bin/env\ bash
-set nocompatible
-filetype off
+set shell=/usr/bin/env\ zsh
 
-set rtp+=/usr/local/opt/fzf
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin()
 " Plugins start
 Plugin 'Chiel92/vim-autoformat'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'benmills/vimux'
-Plugin 'chriskempson/base16-vim'
-Plugin 'fatih/vim-go'
 Plugin 'hashivim/vim-terraform'
+Plugin 'honza/vim-snippets'
 Plugin 'junegunn/fzf.vim'
-Plugin 'mattn/emmet-vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'mg979/vim-visual-multi', {'branch': 'master'}
+Plugin 'ryanoasis/vim-devicons'
 Plugin 'scrooloose/nerdtree'
+Plugin 'SirVer/ultisnips'
 Plugin 'stephpy/vim-yaml'
-Plugin 'ternjs/tern_for_vim', { 'for': 'javascript' }
 Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-fugitive'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'zxqfl/tabnine-vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Plugins end
 call vundle#end()
 
+set nocompatible
+set encoding=utf8
+filetype off
 filetype plugin indent on
+syntax on
 
 if $TMUX == ''
   set clipboard+=unnamed
 endif
 
-if &term == "screen"
-  set t_Co=256
-endif
-
 "mouse support
 set mouse=a
-syntax on
-set encoding=utf8
-let base16colorspace=256
+
+" let base16colorspace=256
 set t_Co=256
 set background=dark
 colorscheme delek
+set scrolloff=2
 
 " indentation
 " set noexpandtab
@@ -64,6 +57,9 @@ set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
+highlight Folded ctermfg=130 ctermbg=238
+
+set splitright
 
 " Searching
 set ignorecase
@@ -79,33 +75,18 @@ set listchars=tab:▸\ ,trail:☠,nbsp:☠,precedes:←,extends:→,eol:$,space:
 
 set hidden
 set number
-" set relativenumber
+set relativenumber
 set laststatus=2
 
+if !has('nvim')
+  set completeopt+=popup
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plungins config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" chase/vim-ansible-yaml
-let g:ansible_options = {'ignore_blank_lines': 0}
-
-" fatih/vim-go
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
-let g:go_doc_popup_window = 1
-" set completeopt-=preview
-" autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-" autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-autocmd CompleteDone * pclose
-augroup previewWindowPosition
-  au!
-  autocmd BufWinEnter * call PreviewWindowPosition()
-augroup END
-function! PreviewWindowPosition()
-  if &previewwindow
-    wincmd L
-  endif
-endfunction
+" SirVer/ultisnips
+let g:UltiSnipsExpandTrigger="<c-j>"
 
 " scrooloose/nerdtree
 let NERDTreeIgnore=['.git$[[dir]]', '.swp']
@@ -113,9 +94,8 @@ let g:NERDTreeHighlightCursorline=0
 let g:NERDTreeQuitOnOpen=0
 let g:NERDTreeShowHidden=1
 let g:NERDTreeChDirMode=2
-
 " expand to the path of the file in the current buffer
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
       \ "Modified"  : "*",
       \ "Staged"    : "﯁",
       \ "Untracked" : "",
@@ -127,45 +107,49 @@ let g:NERDTreeIndicatorMapCustom = {
       \ 'Ignored'   : '',
       \ "Unknown"   : ""
       \ }
+
+" Valloric/YouCompleteMe
+let g:ycm_always_populate_location_list = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_gopls_binary_path = "$HOME/go/bin/gopls"
+" let g:ycm_log_level = 'debug'
+
 " fzf
-let $FZF_DEFAULT_COMMAND='ag --hidden --ignore \*.swp --ignore .git --ignore node_modules/ -U -g ""'
+let $FZF_DEFAULT_COMMAND='ag --hidden --ignore \*.swp --ignore .git --ignore node_modules/ --ignore .terraform --ignore converage/ -U -g ""'
 
 " hashivim/vim-terraform
 let g:terraform_align=1
 let g:terraform_fold_sections=1
 let g:terraform_fmt_on_save=1
 
-" mattn/emmet-vim
-let g:user_emmet_settings = {
-      \  'javascript' : {
-      \    'extends' : 'jsx',
-      \  },
-      \}
-
 " vim-airline/vim-airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='deus'
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Custom Key mapping
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "copy usint ctrl+c while in visual mode
-map <f8> :call NextIssue()<cr>
+nnoremap<f8> :try<bar>lnext<bar>catch /^Vim\%((\a\+)\)\=:E\%(553\<bar>42\):/<bar>lfirst<bar>endtry<cr>
 map <C-h> :call WinMove('h')<cr>
 map <C-j> :call WinMove('j')<cr>
 map <C-k> :call WinMove('k')<cr>
 map <C-l> :call WinMove('l')<cr>
-map <expr> <C-n> g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
+map <expr> <C-m> g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
 vmap <C-c> "+y<cr>
 nmap <leader>p "_ciw<esc>p
-nnoremap <leader>f :FZF<cr>
+nnoremap <leader>f :Files<cr>
 nnoremap <leader>F :Ag<cr>
-nnoremap <leader>l :ls<CR>:b<Space>
-map <C-@> <esc>:call ArgumentSubstitution()<cr>
-imap <C-@> <esc>:call ArgumentSubstitution()<cr>
+nnoremap <leader>b :Lines<cr>
+nnoremap <leader>l :Buffers<cr>
+
+noremap <leader>n <esc>:call ArgumentSubstitution()<cr>
+inoremap <C-9> <esc>:call ArgumentSubstitution()<cr>
 nmap gt :bn<cr>
 nmap gT :bN<cr>
+nmap <leader>h <plug>(YCMHover)
+nmap gd :YcmCompleter GoTo<cr>
 
 "replace brackets, quotes
 nmap <leader>r' :call WrapIn("'", "\"")<cr>
@@ -175,10 +159,10 @@ nmap <leader>r{ :call WrapIn("{", "w")<cr>
 nmap <leader>r[ :call WrapIn("[", "w")<cr>
 nmap <leader>r( :call WrapIn("(", "w")<cr>
 
-:command WQ wq
-:command Wq wq
-:command W w
-:command Q q
+:command! WQ wq
+:command! Wq wq
+:command! W w
+:command! Q q
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Functions
@@ -195,17 +179,6 @@ function! WinMove(key)
       wincmd s
     endif
     exec "wincmd ".a:key
-  endif
-endfunction
-
-function! NextIssue() abort
-  let l:hasLspError = 0
-  if exists(":LspNextError")
-    exec ':LspNextError'
-    let l:hasLspError = lsp#ui#vim#diagnostics#get_diagnostics_under_cursor()
-  endif
-  if &spell && l:hasLspError == 0
-    normal! ]s
   endif
 endfunction
 
@@ -276,25 +249,17 @@ function! RemoveTrailingSpaces()
   execute '%s/ *$//g'
 endfunction
 
-function! ToggleBuffer()
-  execute ':e #'
-endfunction
-
-augroup javascript_folding
-  au!
-  au FileType javascript setlocal foldmethod=syntax
-augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocmd
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd FileType gitcommit setlocal spell
 autocmd BufNewFile,BufReadPost *.{md,txt},README setlocal spell
 autocmd BufWrite *.{tf,go} :Autoformat
+autocmd BufWritePost *.go YcmForceCompileAndDiagnostics
+autocmd BufEnter *.{tf,go,sh,json,yaml,yml} set foldmethod=syntax
+autocmd BufEnter /usr/local/Cellar/neovim/*/share/nvim/runtime/doc/*.txt  setlocal nospell
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Disable Arrow keys in Insert & Escape mode :D
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
 map <up> <nop>
 map <down> <nop>
 map <left> <nop>

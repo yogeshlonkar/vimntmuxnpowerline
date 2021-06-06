@@ -3,17 +3,19 @@
 function fstrigger()
 {
   local to_watch to_execute red green
-  if [[ -f ${1} || -d ${1} ]]; then
-     to_watch=${1}
-     to_execute=${@:2}
-  else
-    to_watch=$(pwd)
-    to_execute=${@}
-  fi
+  for arg in "$@"
+  do
+    if [[ -f $arg ]] || [[ -d $arg ]]; then
+      to_watch+=($arg)
+    else
+      to_execute+=${arg}" "
+    fi
+  done
   red='\033[1;31m'
   green='\033[1;32m'
-  echo "Watching ${to_watch}"
-  while fswatch -e '*.swp' -1 -xnr ${to_watch} >/dev/null 2>&1; do
+  echo "Watching ${to_watch[@]}"
+  echo "Will execute ${to_execute[@]}"
+  while fswatch -e '*.swp' -1 -xnr ${to_watch[@]} >/dev/null 2>&1; do
     echo -e "\033[1;36mFile change triggered\033[0m"
     color=${red}
     eval "${to_execute[@]}" && color=${green} || true
@@ -33,25 +35,19 @@ function sanitize()
 function check_op_session()
 {
   source ~/.yrl_environment
-  curr_time=$(date +%s)
-  time_left=$(( $OP_SESSION_TIME - $curr_time ))
-  if [[ -z "${OP_SESSION_my}" ]] || (( $time_left < 60 )); then
+  OP_SESSION_new=$(op signin my --session "$OP_SESSION_my" --output=raw)
+  if [[ "$OP_SESSION_new" != "$OP_SESSION_my" ]]; then
     unset OP_SESSION_my
-    while [[ -z "$OP_SESSION_my" ]]; do
-      OP_SESSION_my=$(op signin my --output=raw)
-    done
-    export OP_SESSION_my=$OP_SESSION_my
-    export OP_SESSION_TIME=$(( $curr_time + 1800 ))
-    sed -i -e "s/export OP_SESSION_my=.*/export OP_SESSION_my=$OP_SESSION_my/g" ~/.yrl_environment
-    sed -i -e "s/export OP_SESSION_TIME=.*/export OP_SESSION_TIME=$OP_SESSION_TIME/g" ~/.yrl_environment
+    export OP_SESSION_my=$OP_SESSION_new
+    sed -i -e "s/export OP_SESSION_my=.*/export OP_SESSION_my=$OP_SESSION_new/g" ~/.yrl_environment
   fi
 }
 
 function mfa()
 {
   check_op_session
-  echo "MFA copied, valid for $(expr 30 - $(date +%s) % 30)s"
   op get totp rkdtjsgg4raf3p4b2zlxvpskay | pbcopy
+  echo "MFA copied, valid for $(expr 30 - $(date +%s) % 30)s"
 }
 
 function getgpgpass()
@@ -60,11 +56,19 @@ function getgpgpass()
   op get item "GPG Passphrase" | jq -r '.details.password' | pbcopy
 }
 
+function unset_dazn_aws_env()
+{
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_DEFAULT_REGION
+  unset AWS_SESSION_TOKEN
+  unset AWS_SECURITY_TOKEN
+}
+
 function dazn_aws_set_env()
 {
-  mfa
   if [[ -z ${1} ]]; then
-    acc=dazn-payments-dev
+    acc=dazn-platform-dev
   else
     acc=${1}
   fi
@@ -82,9 +86,9 @@ function git_branch_cleanup()
     if [[ `git branch -va | grep gone | wc -l` -gt 0 ]]; then
       local answer
       if [ -n "$ZSH_VERSION" ]; then
-        read -q "answer?Delete all of these?"
+        read -q "answer?Delete all of these? "
       else
-        read -p "Delete all of these?" answer
+        read -p "Delete all of these? " answer
       fi
       echo -en "\n"
       case $answer in
@@ -117,17 +121,17 @@ function _print_script_with_sources()
 
   IFS=''
   cat "${script_to_read}" | while read linex; do
-    if [[ "${linex}" = *"source "* ]]; then
-      local sourced_file=$(echo -e "${linex}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^source[[:space:]]*\([^ *]\)/\1/g')
-      sourced_file=$(eval "realpath ${sourced_file}" 2>/dev/null)
-      if [[ -f "${sourced_file}" ]]; then
-        echo -e "${padding}# ${linex}"
-        _print_script_with_sources "${sourced_file}" "${padding}   "
-        continue
-      fi
+  if [[ "${linex}" = *"source "* ]]; then
+    local sourced_file=$(echo -e "${linex}" | sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' -e 's/^source[[:space:]]*\([^ *]\)/\1/g')
+    sourced_file=$(eval "realpath ${sourced_file}" 2>/dev/null)
+    if [[ -f "${sourced_file}" ]]; then
+      echo -e "${padding}# ${linex}"
+      _print_script_with_sources "${sourced_file}" "${padding}   "
+      continue
     fi
-    echo -e "${padding}${linex}"
-  done
+  fi
+  echo -e "${padding}${linex}"
+done
 }
 
 function _bash_profile()
@@ -135,7 +139,22 @@ function _bash_profile()
   _print_script_with_sources ~/.bash_profile
 }
 
-function help()
+function help() {
+  MANPAGER="nvim -c 'set ft=man' +':silent! /^ *$@ ' +':noh' -"
+  run-help $@
+}
+
+function db_tunnel()
 {
-  bash -c "help $@"
+  if [[ -z ${1} ]]; then
+    env=dev
+  else
+    env=${1}
+  fi
+  echo "Connecting to ${env}"
+  if [[ "${env}" == "prod" ]]; then
+    sshuttle -e 'ssh -J yogesh.lonkar@prod-eu-central-1-tunnel-service.daznplatform.com:443' -r yogesh.lonkar@mesh-bastion-service-euc1-prod.transit.indazn.com 0/0:5432 -vv
+  else
+    sshuttle -e 'ssh -J yogesh.lonkar@prod-eu-central-1-tunnel-service.daznplatform.com:443' -r yogesh.lonkar@mesh-bastion-service-euc1-${env}.transit.dazn-stage.com 0/0:5432 -vv
+  fi
 }

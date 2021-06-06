@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 SECS=$(date +%s)
 HEART='♥'
-EMPTY_HEART=''
+EMPTY_HEART='♥'
 HALF_HEART='ﯜ'
 # if [[ "$(date +%s)" != *"60" ]]; then
 #   return 0
@@ -31,10 +31,7 @@ for i in `seq 1 $charged_slots`; do
   if (( charged_slots != i )); then
 	echo -n "$HEART";
   else
-	# if [ "$is_charging" == "Yes" ] && [ $(($SECS%2)) -eq 0 ]; then
-	  # echo -n '#[fg=white]'
-	# fi
-	if (( last_slot_decimal < 5 )); then
+	if [[ last_slot_decimal -lt 5 ]]; then
 	  echo -n "$HALF_HEART";
 	else
 	  echo -n "$HEART";
@@ -43,7 +40,7 @@ for i in `seq 1 $charged_slots`; do
 done
 
 if [[ $charged_slots -lt 10 ]]; then
-  echo -n '#[fg=white]'
+  echo -n '#[fg=#464646]'
   for i in `seq 1 $(echo "10-$charged_slots" | bc)`; do echo -n "$EMPTY_HEART"; done
 fi
 echo -en "\n"

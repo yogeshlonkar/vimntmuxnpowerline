@@ -1,0 +1,52 @@
+# zmodload zsh/zprof
+unalias run-help
+autoload -Uz run-help
+export ZSH="/Users/yogesh/.oh-my-zsh"
+ZSH_DISABLE_COMPFIX=true
+
+ZSH_THEME="yogeshlonkar"
+
+CASE_SENSITIVE="true"
+
+plugins=(
+  autojump
+  aws
+  fzf
+  git
+  golang
+  helm
+  npm
+  terraform
+  vault
+  vi-mode
+  zsh-autosuggestions
+  zsh-history-substring-search
+  zsh-syntax-highlighting
+  colored-man-pages
+)
+
+setopt menu_complete
+setopt list_rows_first
+unsetopt share_history
+
+function __yrl__()
+{
+  local session=$(tmux display-message -p '#S')
+  source $ZSH/oh-my-zsh.sh
+  bindkey "\C-k" history-beginning-search-backward
+  bindkey "\C-j" history-beginning-search-forward
+  source ~/.yrl/environment
+  source ~/.yrl/secrets-$session
+  source ~/.yrl/utils
+  source ~/.yrl/aliases
+  PROG=dazn
+  _CLI_ZSH_AUTOCOMPLETE_HACK=1
+  source ~/zsh_autocomplete
+}
+if [[ -n "$TMUX" ]]; then
+  __yrl__
+fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/sbin:$PATH"
+# zprof

@@ -1,5 +1,5 @@
 *vim_source/
-*.yrl_secrets
+secret*
 *temp
 *.retry
 *.swp
