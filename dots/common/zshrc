@@ -1,7 +1,7 @@
 # zmodload zsh/zprof
 unalias run-help
 autoload -Uz run-help
-export ZSH="/Users/yogesh/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_DISABLE_COMPFIX=true
 
 ZSH_THEME="yogeshlonkar"
@@ -35,18 +35,20 @@ function __yrl__()
   source $ZSH/oh-my-zsh.sh
   bindkey "\C-k" history-beginning-search-backward
   bindkey "\C-j" history-beginning-search-forward
-  source ~/.yrl/environment
-  source ~/.yrl/secrets-$session
-  source ~/.yrl/utils
-  source ~/.yrl/aliases
+  source $HOME/.yrl/environment
+  if [[ -f $HOME/.yrl/secrets-$session ]]; then
+    source $HOME/.yrl/secrets-$session
+  fi
+  source $HOME/.yrl/utils
+  source $HOME/.yrl/aliases
   PROG=dazn
   _CLI_ZSH_AUTOCOMPLETE_HACK=1
-  source ~/zsh_autocomplete
+  source $HOME/zsh_autocomplete
 }
 if [[ -n "$TMUX" ]]; then
   __yrl__
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 export PATH="/usr/local/sbin:$PATH"
 # zprof

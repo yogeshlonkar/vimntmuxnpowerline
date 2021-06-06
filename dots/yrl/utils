@@ -34,12 +34,12 @@ function sanitize()
 
 function check_op_session()
 {
-  source ~/.yrl_environment
+  source $HOME/.yrl_environment
   OP_SESSION_new=$(op signin my --session "$OP_SESSION_my" --output=raw)
   if [[ "$OP_SESSION_new" != "$OP_SESSION_my" ]]; then
     unset OP_SESSION_my
     export OP_SESSION_my=$OP_SESSION_new
-    sed -i -e "s/export OP_SESSION_my=.*/export OP_SESSION_my=$OP_SESSION_new/g" ~/.yrl_environment
+    sed -i -e "s/export OP_SESSION_my=.*/export OP_SESSION_my=$OP_SESSION_new/g" $HOME/.yrl_environment
   fi
 }
 
@@ -136,7 +136,7 @@ done
 
 function _bash_profile()
 {
-  _print_script_with_sources ~/.bash_profile
+  _print_script_with_sources $HOME/.bash_profile
 }
 
 function help() {
