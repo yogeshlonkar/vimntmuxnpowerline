@@ -198,6 +198,7 @@ imap <right> <nop>
 :command! Wq wq
 :command! W w
 :command! Q q
+command! Scrap setlocal bt=nofile bh=wipe nobl noswapfile nu
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Functions
