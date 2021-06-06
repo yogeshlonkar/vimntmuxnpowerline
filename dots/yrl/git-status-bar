@@ -11,6 +11,8 @@ fi
 if ! git status --no-ahead-behind --short >/dev/null 2>&1; then
   exit 1
 fi
+fg_color="fg=color235"
+bg_color="bg=color209"
 
 # Manage remote updates every 15 minutes
 dir_id=$(echo -n $dir | base64)
@@ -38,7 +40,7 @@ update_remote()
   sqlite3 /tmp/.git-remote-update.db "insert or replace into gru (id, d, e) values ('${dir_id}', ${curr_time}, ${success})"
 }
 if (( curr_time > stale_timeout || remote_update_error && curr_time > error_timeout )); then
-  printf "#[fg=colour235,bg=colour114]       "
+  printf "#[$fg_color,$bg_color]       "
   update_remote >/dev/null 2>&1 &
   exit 0;
 fi
@@ -158,9 +160,9 @@ else
       git_status="$git_status "
     fi
     branch=$(echo $branch | sed -E -e 's/(features?)(\/.*)/F\2/g' -e 's/(hotfix)(\/.*)/H\2/g' -e 's/(releases?)(\/.*)/R\2/g' -e 's/(bugfix)(\/.*)/B\2/g' -e 's/(issues?)(\/.*)/I\2/g' | awk -v len=50 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
-    printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status"
+    printf "#[$fg_color,$bg_color]  %s %s" "$branch" "$git_status"
     if (( success == 1 )); then
       echo $(stat -f "%m" .) > /tmp/.git-status-bar.cache
-      printf "#[fg=colour235,bg=colour114]  %s %s" "$branch" "$git_status"  >> /tmp/.git-status-bar.cache
+      printf "#[$fg_color,$bg_color]  %s %s" "$branch" "$git_status"  >> /tmp/.git-status-bar.cache
     fi
 
