@@ -9,11 +9,15 @@ Plugin 'Chiel92/vim-autoformat'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'hashivim/vim-terraform'
+Plugin 'HerringtonDarkholme/yats.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mg979/vim-visual-multi', {'branch': 'master'}
+Plugin 'mhartington/nvim-typescript', {'for': ['typescript', 'tsx'], 'do': './install.sh' }
 Plugin 'preservim/tagbar'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Shougo/denite.nvim'
+Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plugin 'SirVer/ultisnips'
 Plugin 'stephpy/vim-yaml'
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -28,6 +32,8 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ryanoasis/vim-devicons'
 " Plugins end
 call vundle#end()
+
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 set nocompatible
 set encoding=utf8
@@ -130,6 +136,12 @@ let g:NERDTreeGitStatusIndicatorMapCustom = { 'Modified': '*', 'Staged': '﯁', 
 
 " SirVer/ultisnips
 let g:UltiSnipsExpandTrigger="<c-j>"
+
+" Shougo/deoplete.nvim
+let g:loaded_python_provider = 0
+if (&ft=='gitcommit')
+  let g:deoplete#enable_at_startup = 1
+endif
 
 " Valloric/YouCompleteMe
 let g:ycm_always_populate_location_list = 1

@@ -11,4 +11,5 @@ export PATH=$PATH:$HOME/go/bin
 export NVM_DIR="$HOME/.nvm"
 export OP_SESSION_my=XXrw6VJRp5KwFEWm5wt6wjK5rdKF9GFgZELfyk8cXPs
 export MANPAGER="nvim -c 'set ft=man' -"
+export TERM=screen-256color
 
