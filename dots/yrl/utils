@@ -1,5 +1,4 @@
-# vim: set ft=bash:
-# utility functions
+# vim: set ft=zsh:
 function fstrigger()
 {
   local to_watch to_execute red green
@@ -11,15 +10,21 @@ function fstrigger()
       to_execute+=${arg}" "
     fi
   done
-  red='\033[1;31m'
-  green='\033[1;32m'
-  echo "Watching ${to_watch[@]}"
-  echo "Will execute ${to_execute[@]}"
+  bold='\033[1m'
+  info='\033[36m'
+  red='\033[31m'
+  green='\033[32m'
+  reset='\033[0m'
+  echo "$bold$info憎${to_watch[@]}$reset"
+  echo "$bold$green  ${to_execute[@]}$reset"
   while fswatch -e '*.swp' -1 -xnr ${to_watch[@]} >/dev/null 2>&1; do
-    echo -e "\033[1;36mFile change triggered\033[0m"
-    color=${red}
-    eval "${to_execute[@]}" && color=${green} || true
-    echo -e "\n${color}Trigger finished\033[0m\n"
+    cols=$(tput cols)
+    sleep 0.2
+    color=$red
+    eval "${to_execute[@]}" && color=$green
+    printf "$reset$color"
+    printf "%.0s" {2..$cols}
+    printf "$reset"
   done
 }
 
@@ -157,4 +162,12 @@ function db_tunnel()
   else
     sshuttle -e 'ssh -J yogesh.lonkar@prod-eu-central-1-tunnel-service.daznplatform.com:443' -r yogesh.lonkar@mesh-bastion-service-euc1-${env}.transit.dazn-stage.com 0/0:5432 -vv
   fi
+}
+
+function icopy()
+{
+  if [[ -z "$i_custom_c" ]]; then
+    source $HOME/git-repos/nerd-fonts/bin/scripts/lib/i_*
+  fi
+  echo -n $1 | pbcopy
 }

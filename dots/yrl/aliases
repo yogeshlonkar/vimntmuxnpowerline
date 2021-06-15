@@ -1,6 +1,4 @@
-# vim: set ft=bash:
-# aliases
-
+# vim: set ft=zsh:
 alias temp="cd $HOME/temp"
 alias hlt="helm template . | vim - \"+set filetype=yaml\""
 alias chrome-debug="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9229"
@@ -10,4 +8,4 @@ alias docker_rit="docker run --rm -it "
 alias got="go clean -testcache && gotestsum"
 alias loadnvm=". /usr/local/opt/nvm/nvm.sh"
 alias vim="nvim"
-alias scrap="vim -c Scrap"
+alias s{p,crap}="vim -c Scrap"

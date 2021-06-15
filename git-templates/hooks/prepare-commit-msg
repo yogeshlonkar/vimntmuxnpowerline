@@ -1,0 +1,24 @@
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+change=
+branch=$(git rev-parse --symbolic --abbrev-ref HEAD)
+if [[ $branch = "feat"* ]]; then
+  change="feat:"
+elif [[ $branch = "hotfix"* ]] || [[ $branch = "bugfix"* ]] || [[ $branch = "fix"* ]]; then
+  change="fix:"
+elif [[ $branch = "chore"* ]]; then
+  change="chore:"
+fi
+
+# Only add custom message when there is no commit source
+# ($COMMIT_SOURCE is empty). Otherwise, keep the default message
+# proposed by Git. Possible commit source: message, template,
+# merge, squash or commit. See https://git-scm.com/docs/githooks
+if [[ -z "$COMMIT_SOURCE" ]]
+then
+  hint=$(cat "$COMMIT_MSG_FILE")
+  echo "${change} " > "$COMMIT_MSG_FILE"
+  echo "$hint" >> "$COMMIT_MSG_FILE"
+fi

@@ -21,6 +21,7 @@ Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plugin 'SirVer/ultisnips'
 Plugin 'stephpy/vim-yaml'
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-eunuch'
 Plugin 'Valloric/YouCompleteMe'
@@ -165,29 +166,25 @@ autocmd VimEnter * call _airline_init()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Custom Key mapping
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"copy usint ctrl+c while in visual mode
-" map      <C-h>           :call WinMove('h')<cr>
-" map      <C-j>           :call WinMove('j')<cr>
-" map      <C-k>           :call WinMove('k')<cr>
-" map      <C-l>           :call WinMove('l')<cr>
+map      <space>     <Plug>(easymotion-prefix)
 noremap  <expr>
-       \ <C-m>           g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
-inoremap <C-9>           <esc>:call ArgumentSubstitution()<cr>
-nmap     <f12>           :TagbarToggle<cr>
-nmap     <leader>i       <plug>(YCMHover)
-nmap     <leader>h       :Helptags<cr>
-nmap     <leader>p       "_ciw<esc>p
-nmap     gd              :YcmCompleter GoTo<cr>
-nmap     gt              :bn<cr>
-nmap     gT              :bN<cr>
-nnoremap <f8>            :try<bar>lnext<bar>catch /^Vim\%((\a\+)\)\=:E\%(553\<bar>42\):/<bar>lfirst<bar>endtry<cr>
-nnoremap <leader>b       :Lines<cr>
-nnoremap <leader>F       :Ag<cr>
-nnoremap <leader>f       :Files<cr>
-nnoremap <leader>l       :Buffers<cr>
-nnoremap  <leader>m       :Marks<cr>
-noremap  <leader>n       <esc>:call ArgumentSubstitution()<cr>
-vnoremap <C-c>           "+y<cr>
+       \ <C-m>       g:NERDTree.IsOpen() == 0 ? ":NERDTreeFind<cr>" : ":NERDTreeClose<cr>"
+inoremap <C-9>       <esc>:call ArgumentSubstitution()<cr>
+nmap     <f12>       :TagbarToggle<cr>
+nmap     <leader>i   <plug>(YCMHover)
+nmap     <leader>h   :Helptags<cr>
+nmap     <leader>p   "_ciw<esc>p
+nmap     gd          :YcmCompleter GoTo<cr>
+nmap     gt          :bn<cr>
+nmap     gT          :bN<cr>
+nnoremap <f8>        :try<bar>lnext<bar>catch /^Vim\%((\a\+)\)\=:E\%(553\<bar>42\):/<bar>lfirst<bar>endtry<cr>
+nnoremap <leader>b   :Lines<cr>
+nnoremap <leader>F   :Ag<cr>
+nnoremap <leader>f   :Files<cr>
+nnoremap <leader>l   :Buffers<cr>
+nnoremap  <leader>m  :Marks<cr>
+noremap  <leader>n   <esc>:call ArgumentSubstitution()<cr>
+vnoremap <C-c>       "+y<cr>
 
 "replace brackets, quotes
 nmap <leader>r' :call WrapIn("'", "\"")<cr>
